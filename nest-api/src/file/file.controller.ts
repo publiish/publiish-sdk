@@ -7,13 +7,13 @@ export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Get()
-  getHello(): string {
+  getHello() {
     return this.fileService.getHello();
   }
 
   @Post('file_add_update')
-  postFile(): PostFileResponse {
-    return this.fileService.postFile();
+  async postFile(): Promise<PostFileResponse> {
+    return await this.fileService.postFile();
   }
 
   @Delete('file_delete')
