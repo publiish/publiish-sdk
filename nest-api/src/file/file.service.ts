@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as FormData from 'form-data';
@@ -31,9 +32,8 @@ export class FileService {
       clusterUrl += '?' + process.env.CLUSTER_CONF_CID_VERSION;
     }
 
-    console.log(clusterUrl);
     const form = new FormData();
-    form.append('file', uploadedFile.destination);
+    form.append('file', uploadedFile.path);
 
     const { data } = await axios.post(clusterUrl, form, {
       headers: {
@@ -49,8 +49,6 @@ export class FileService {
       .filter((s) => s.length > 0)
       .map((s) => JSON.parse(s));
 
-    console.log(jsonObjects);
-
     const file = await this.fileRepository.save(
       new File({
         brand_id,
@@ -62,6 +60,8 @@ export class FileService {
         filename: uploadedFile.originalname,
       }),
     );
+
+    fs.unlinkSync(uploadedFile.path);
 
     return {
       success: 'Y',
