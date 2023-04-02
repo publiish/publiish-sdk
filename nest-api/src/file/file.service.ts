@@ -90,13 +90,20 @@ export class FileService {
 
     const response = await axios.delete(`${clusterUrl}/pins/${cid}`);
 
-    console.log(response);
-
     return {
       success: 'Y',
       status: 200,
       status_code: 200,
       data: 'File has been deleted successfully',
+    };
+  }
+
+  public getPublishLink(cid: string, filename: string) {
+    let ipfs_url = process.env.IPFS_URL || 'localhost:8080';
+
+    return {
+      status: true,
+      link: `${ipfs_url}/ipfs/${cid}?filename=${filename}`,
     };
   }
 }

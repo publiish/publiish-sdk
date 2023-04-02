@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -37,5 +39,13 @@ export class FileController {
     @Body() { brand_id, auth_user_id, cid }: DeleteFileDto,
   ): Promise<DeleteFileResponse> {
     return this.fileService.deleteFile(brand_id, auth_user_id, cid);
+  }
+
+  @Get('publish-link/:cid')
+  getPublishLink(
+    @Param('cid') cid: string,
+    @Query('filename') filename: string,
+  ) {
+    return this.fileService.getPublishLink(cid, filename);
   }
 }
