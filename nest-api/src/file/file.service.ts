@@ -33,31 +33,40 @@ export class FileService {
 
     console.log(clusterUrl);
     const form = new FormData();
-    form.append('path', uploadedFile.destination);
-    form.append('name', uploadedFile.originalname);
+    form.append('file', uploadedFile.destination);
 
-    const response = await axios.post(clusterUrl, form, {
+    const { data } = await axios.post(clusterUrl, form, {
       headers: {
         'Content-Type': `multipart/form-data: boundary=${form.getBoundary()}`,
       },
     });
 
-    // const file = await this.fileRepository.save(
-    //   new File({
-    //     brand_id,
-    //     cid: response.data.cid,
-    //     consumer_id: auth_user_id,
-    //     updated_by: auth_user_id,
-    //     created_by: auth_user_id,
-    //     file_type: uploadedFile.mimetype,
-    //     filename: uploadedFile.originalname,
-    //   }),
-    // );
+    let ipfsData = typeof data !== 'string' ? JSON.stringify(data) : data;
+
+    const jsonStrings = ipfsData.split('\n');
+
+    const jsonObjects: any = jsonStrings
+      .filter((s) => s.length > 0)
+      .map((s) => JSON.parse(s));
+
+    console.log(jsonObjects);
+
+    const file = await this.fileRepository.save(
+      new File({
+        brand_id,
+        cid: jsonObjects[0].cid,
+        consumer_id: auth_user_id,
+        updated_by: auth_user_id,
+        created_by: auth_user_id,
+        file_type: uploadedFile.mimetype,
+        filename: uploadedFile.originalname,
+      }),
+    );
 
     return {
       success: 'Y',
       status: 200,
-      cid: 'asdasdas',
+      cid: file.cid,
     };
   }
 
