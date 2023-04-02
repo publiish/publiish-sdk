@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  Redirect,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -47,5 +48,15 @@ export class FileController {
     @Query('filename') filename: string,
   ) {
     return this.fileService.getPublishLink(cid, filename);
+  }
+
+  @Get('download/:cid')
+  @Redirect(process.env.IPFS_URL || 'http://localhost:8080')
+  getDocs(@Param('cid') cid: string, @Query('filename') filename: string) {
+    let ipfs_url = process.env.IPFS_URL || 'http://localhost:8080';
+
+    return {
+      url: `${ipfs_url}/ipfs/${cid}?filename=${filename}&download=true`,
+    };
   }
 }
