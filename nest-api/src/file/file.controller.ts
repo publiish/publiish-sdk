@@ -10,7 +10,7 @@ import {
 import { FileService } from './file.service';
 import { DeleteFileResponse, PostFileResponse } from './types';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadFileDto } from './dto';
+import { DeleteFileDto, UploadFileDto } from './dto';
 
 @Controller('files')
 export class FileController {
@@ -23,17 +23,19 @@ export class FileController {
 
   @Post('file_add_update')
   @UseInterceptors(FileInterceptor('upload_file'))
-  async postFile(
+  postFile(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: UploadFileDto,
   ): Promise<PostFileResponse> {
     const { brand_id, auth_user_id } = body;
 
-    return await this.fileService.postFile(file, brand_id, auth_user_id);
+    return this.fileService.postFile(file, brand_id, auth_user_id);
   }
 
   @Delete('file_delete')
-  deletFile(): DeleteFileResponse {
-    return this.fileService.deleteFile();
+  deleteFile(
+    @Body() { brand_id, auth_user_id, cid }: DeleteFileDto,
+  ): Promise<DeleteFileResponse> {
+    return this.fileService.deleteFile(brand_id, auth_user_id, cid);
   }
 }

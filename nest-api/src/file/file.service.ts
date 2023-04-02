@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as FormData from 'form-data';
 import { Repository } from 'typeorm';
 import { DeleteFileResponse, PostFileResponse } from './types';
 import { File } from './file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ERROR_MESSAGE } from 'src/common/error/messages';
 
 @Injectable()
 export class FileService {
@@ -60,7 +61,28 @@ export class FileService {
     };
   }
 
-  deleteFile(): DeleteFileResponse {
+  async deleteFile(
+    brand_id: number,
+    auth_user_id: number,
+    cid: string,
+  ): Promise<DeleteFileResponse> {
+    const file = await this.fileRepository.findOne({
+      where: { brand_id, consumer_id: auth_user_id, cid },
+    });
+
+    if (!file) {
+      throw new HttpException(
+        ERROR_MESSAGE.FILE_NOT_FOUND,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    let clusterUrl = process.env.CLUSTER_URL || 'http://localhost:9094';
+
+    const response = await axios.delete(`${clusterUrl}/pins/${cid}`);
+
+    console.log(response);
+
     return {
       success: 'Y',
       status: 200,
@@ -69,10 +91,3 @@ export class FileService {
     };
   }
 }
-
-const asdasd = {
-  name: '',
-  cid: 'Qme4RdmZTMdG37oSs7XkCNeXHnSVJpNTmdx5LazS3rKeeJ',
-  size: 16,
-  allocations: ['12D3KooWKZzcjFjaTjFFDpHuu9tK7qBwFdUeqMYYfoEi2qpaWyTD'],
-};

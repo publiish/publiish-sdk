@@ -51,4 +51,8 @@ export const ERROR_MESSAGE = {
     summary: 'Authentication not found',
     code: ErrorCode.AUTHENTICATION_NOT_FOUND,
   },
+  [ErrorCode.FILE_NOT_FOUND]: {
+    summary: 'File could not be found',
+    code: ErrorCode.FILE_NOT_FOUND,
+  },
 };
