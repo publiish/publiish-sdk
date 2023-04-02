@@ -15,7 +15,11 @@ export class FileService {
     return await this.fileRepository.find();
   }
 
-  async postFile(): Promise<PostFileResponse> {
+  async postFile(
+    uploadedFile: Express.Multer.File,
+    brandId: number,
+    authUserId: number,
+  ): Promise<PostFileResponse> {
     const file = await this.fileRepository.save(
       new File({
         brand_id: 1,
