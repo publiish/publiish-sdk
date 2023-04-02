@@ -43,6 +43,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
     } else {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
+      body.code = status;
       body.summary = exception.message || ERROR_MESSAGE.UNKNOWN;
     }
 
