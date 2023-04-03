@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-console.log(process.env);
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
