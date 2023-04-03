@@ -83,7 +83,7 @@ services:
   api:
     container_name: nest-api
     depends_on:
-      - database
+      - db
     build: ./nest-api
     ports:
       - "3000:3000"
