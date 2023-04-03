@@ -1,7 +1,10 @@
 FROM node:lts as builder
 
 # Create app directory
+USER root
 RUN mkdir -p /usr/src/app
+RUN chown node /usr/src/app
+USER node
 WORKDIR /usr/src/app
 
 # Install app dependencies
@@ -9,16 +12,15 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
+COPY . /usr/src/app
 
 COPY . .
-COPY . /usr/src/app
 
 RUN yarn build
 
 FROM node:lts-slim
 
 ENV NODE_ENV production
-USER node
 
 # Create app directory
 RUN mkdir -p /usr/src/app
@@ -29,6 +31,7 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 
 RUN yarn install --production --frozen-lockfile
+COPY . /usr/src/app
 
 COPY --from=builder /usr/src/app/dist ./dist
 
