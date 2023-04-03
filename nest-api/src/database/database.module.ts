@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: 'root',
         // password: 'password',
         database: 'publiish_local',
-        synchronize: true,
+        synchronize: false,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         extra: {
           connectionLimit: 10,
