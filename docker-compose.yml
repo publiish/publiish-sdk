@@ -59,6 +59,7 @@ services:
 
     
   db:
+    container_name: database
     image: mysql
     restart: always
     environment:
@@ -82,7 +83,7 @@ services:
   api:
     container_name: nest-api
     depends_on:
-      - db
+      - database
     build: ./nest-api
     ports:
       - "3000:3000"
