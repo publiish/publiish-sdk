@@ -6,11 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       useFactory: async () => ({
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        // password: 'password',
-        database: 'publiish_local',
+        host: process.env.DATABASE_HOST,
+        port: Number(process.env.DB_PORT),
+        username: process.env.DATABASE_USER,
+        password: process.env.DATABASE_USER,
+        database: process.env.DATABASE_NAME,
         synchronize: false,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         extra: {

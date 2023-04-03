@@ -1,2 +1,2 @@
-export * from './UploadFileDTO';
+export * from './UploadFileDto';
 export * from './DeleteFileDto';
