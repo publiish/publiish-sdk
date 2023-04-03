@@ -86,6 +86,9 @@ services:
     build: ./nest-api
     ports:
       - "3000:3000"
+    expose:
+      # Opens port 3306 on the container
+      - '3000'
     environment:
       - CLUSTER_CONF_CID_VERSION=cid-version=1
       - CLUSTER_URL=http://cluster:9094
