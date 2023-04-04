@@ -9,12 +9,12 @@ import * as fs from 'fs';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const dir = './tmp/upload';
+    const dir = '/app/tmp/upload';
 
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    cb(null, './tmp/upload');
+    cb(null, '/app/tmp/upload');
   },
   filename: function (_req, file, cb) {
     cb(null, file.originalname);
@@ -25,6 +25,7 @@ const storage = multer.diskStorage({
   imports: [
     TypeOrmModule.forFeature([File]),
     MulterModule.register({
+      dest: '/app/tmp/uploads',
       storage,
     }),
   ],

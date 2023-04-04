@@ -7,6 +7,7 @@ import { DeleteFileResponse, PostFileResponse } from './types';
 import { File } from './file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
+import { join } from 'path';
 
 @Injectable()
 export class FileService {
@@ -33,7 +34,7 @@ export class FileService {
     }
 
     const form = new FormData();
-    form.append('file', uploadedFile.path);
+    form.append('file', join(uploadedFile.destination, uploadedFile.filename));
 
     const { data } = await axios.post(clusterUrl, form, {
       headers: {
@@ -61,7 +62,7 @@ export class FileService {
       }),
     );
 
-    fs.unlinkSync(uploadedFile.path);
+    fs.unlinkSync(join(uploadedFile.destination, uploadedFile.filename));
 
     return {
       success: 'Y',

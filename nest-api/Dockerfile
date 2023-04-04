@@ -20,6 +20,7 @@ FROM node:16-alpine AS builder
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
+RUN mkdir -p /app/tmp/upload
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -34,6 +35,8 @@ RUN yarn build
 # Production image, copy all the files and run next
 FROM node:16-alpine AS runner
 WORKDIR /usr/src/app
+RUN mkdir -p ./tmp/upload
+RUN chmod -R u+w ./tmp/upload
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
