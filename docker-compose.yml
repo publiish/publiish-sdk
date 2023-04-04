@@ -2,6 +2,10 @@ version: '3'
 # This adds first ipfs node and first cluster node in the network 
 # needs to bootstrap to self manually 
 
+networks:
+    app:
+        driver: bridge
+
 services:
 
 ##################################################################################
@@ -75,7 +79,7 @@ services:
     volumes:
       - my-db:/var/lib/mysql
     networks:
-      - default
+      - app
 
 
   api:
@@ -89,6 +93,8 @@ services:
     expose:
       # Opens port 3306 on the container
       - '3000'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       CLUSTER_CONF_CID_VERSION: cid-version=1
       LUSTER_URL: http://localhost:9094
@@ -100,14 +106,14 @@ services:
       DATABASE_NAME: publiish_local
       NODE_ENV: development
     networks:
-      - default
+      - app
 
 
-  # nginx:
-  #   container_name: nginx
-  #   build: ./nginx
-  #   ports:
-  #     - "80:80"
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    ports:
+      - "80:80"
 
 volumes:
   my-db:
