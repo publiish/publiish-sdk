@@ -89,7 +89,6 @@ services:
     expose:
       # Opens port 3306 on the container
       - '3000'
-    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; yarn start:dev'
     environment:
       CLUSTER_CONF_CID_VERSION: cid-version=1
       LUSTER_URL: http://localhost:9094
