@@ -5,10 +5,16 @@ import { FileService } from './file.service';
 import { File } from './file.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import * as multer from 'multer';
+import * as fs from 'fs';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/tmp/upload');
+    const dir = './tmp/upload';
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, './tmp/upload');
   },
   filename: function (_req, file, cb) {
     cb(null, file.originalname);
