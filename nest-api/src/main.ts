@@ -27,6 +27,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('publiish_api')
     .addServer('http://localhost:3000')
+    .addServer('http://18.118.187.243:3000')
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 
