@@ -33,8 +33,10 @@ export class FileService {
       clusterUrl += '?' + process.env.CLUSTER_CONF_CID_VERSION;
     }
 
+    const filePath = join(uploadedFile.destination, uploadedFile.filename);
+
     const form = new FormData();
-    form.append('file', join(uploadedFile.destination, uploadedFile.filename));
+    form.append('file', fs.createReadStream(filePath));
 
     const { data } = await axios.post(clusterUrl, form, {
       headers: {
@@ -62,12 +64,13 @@ export class FileService {
       }),
     );
 
-    fs.unlinkSync(join(uploadedFile.destination, uploadedFile.filename));
+    fs.unlinkSync(filePath);
 
     return {
       success: 'Y',
       status: 200,
       cid: file.cid,
+      filename: file.filename,
     };
   }
 

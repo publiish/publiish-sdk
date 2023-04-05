@@ -42,12 +42,25 @@ export class FileController {
     return this.fileService.deleteFile(brand_id, auth_user_id, cid);
   }
 
+  // @Get('publish-link/:cid')
+  // getPublishLink(
+  //   @Param('cid') cid: string,
+  //   @Query('filename') filename: string,
+  // ) {
+  //   return this.fileService.getPublishLink(cid, filename);
+  // }
+
   @Get('publish-link/:cid')
+  @Redirect(process.env.IPFS_URL || 'http://localhost:8080')
   getPublishLink(
     @Param('cid') cid: string,
     @Query('filename') filename: string,
   ) {
-    return this.fileService.getPublishLink(cid, filename);
+    let ipfs_url = process.env.IPFS_URL || 'http://localhost:8080';
+
+    return {
+      url: `${ipfs_url}/ipfs/${cid}?filename=${filename}`,
+    };
   }
 
   @Get('download/:cid')
