@@ -18,6 +18,9 @@ services:
       - "127.0.0.1:5001:5001" 
       # ipfs gateway - expose if needed/wanted
       - "127.0.0.1:8080:8080" 
+    expose:
+      # Opens port 8080 on the container
+      - '8080'
     volumes:
       #./compose/ipfs0 path for local IPFS persistent data. Better not to comment it
       - /home/$USER/.compose/ipfs:/data/ipfs
@@ -103,11 +106,11 @@ services:
       - ./tmp/upload:/app/tmp/upload
 
 
-  # nginx:
-  #   container_name: nginx-service
-  #   build: ./nginx
-  #   ports:
-  #     - "80:80"
+  nginx:
+    container_name: nginx-service
+    build: ./nginx
+    ports:
+      - "80:80"
 
 volumes:
   my-db:
