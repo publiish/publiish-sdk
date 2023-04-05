@@ -103,11 +103,11 @@ services:
       - ./tmp/upload:/app/tmp/upload
 
 
-  nginx:
-    container_name: nginx-service
-    build: ./nginx
-    ports:
-      - "80:80"
+  # nginx:
+  #   container_name: nginx-service
+  #   build: ./nginx
+  #   ports:
+  #     - "80:80"
 
 volumes:
   my-db:
