@@ -94,6 +94,8 @@ export class FileService {
 
     const response = await axios.delete(`${clusterUrl}/pins/${cid}`);
 
+    await this.fileRepository.update(file.id, { delete_flag: true });
+
     return {
       success: 'Y',
       status: 200,
