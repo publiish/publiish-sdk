@@ -53,6 +53,25 @@ export class FileService {
         .filter((s) => s.length > 0)
         .map((s) => JSON.parse(s));
 
+      const existingFile = await this.fileRepository.findOne({
+        where: { brand_id, consumer_id: auth_user_id, cid: jsonObjects[0].id },
+      });
+
+      if (existingFile) {
+        await this.fileRepository.update(existingFile.id, {
+          delete_flag: false,
+        });
+
+        fs.unlinkSync(filePath);
+
+        return {
+          success: 'Y',
+          status: 200,
+          cid: existingFile.cid,
+          filename: existingFile.filename,
+        };
+      }
+
       const file = await this.fileRepository.save(
         new File({
           brand_id,
@@ -94,11 +113,7 @@ export class FileService {
       );
     }
 
-    let clusterUrl = process.env.CLUSTER_URL || 'http://localhost:9094';
-
     try {
-      const response = await axios.delete(`${clusterUrl}/pins/${cid}`);
-
       await this.fileRepository.update(file.id, { delete_flag: true });
 
       return {
