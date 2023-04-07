@@ -47,6 +47,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       body.summary = exception.message || ERROR_MESSAGE.UNKNOWN;
     }
 
+    body.success = 'N';
+
     response.status(status).send(body);
   }
 }
