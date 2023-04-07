@@ -7,6 +7,8 @@ export class ApiError extends Error {
 
   status: HttpStatus;
 
+  success = 'N';
+
   constructor(
     response: Partial<ApiErrorResponse>,
     status: HttpStatus = HttpStatus.BAD_REQUEST,
@@ -16,6 +18,7 @@ export class ApiError extends Error {
     this.response = {
       ...ERROR_MESSAGE.UNKNOWN,
       ...response,
+      success: 'N',
     };
 
     this.status = status;

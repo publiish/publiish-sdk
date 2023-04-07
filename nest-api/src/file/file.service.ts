@@ -38,40 +38,63 @@ export class FileService {
     const form = new FormData();
     form.append('file', fs.createReadStream(filePath));
 
-    const { data } = await axios.post(clusterUrl, form, {
-      headers: {
-        'Content-Type': `multipart/form-data: boundary=${form.getBoundary()}`,
-      },
-    });
+    try {
+      const { data } = await axios.post(clusterUrl, form, {
+        headers: {
+          'Content-Type': `multipart/form-data: boundary=${form.getBoundary()}`,
+        },
+      });
 
-    let ipfsData = typeof data !== 'string' ? JSON.stringify(data) : data;
+      let ipfsData = typeof data !== 'string' ? JSON.stringify(data) : data;
 
-    const jsonStrings = ipfsData.split('\n');
+      const jsonStrings = ipfsData.split('\n');
 
-    const jsonObjects: any = jsonStrings
-      .filter((s) => s.length > 0)
-      .map((s) => JSON.parse(s));
+      const jsonObjects: any = jsonStrings
+        .filter((s) => s.length > 0)
+        .map((s) => JSON.parse(s));
 
-    const file = await this.fileRepository.save(
-      new File({
-        brand_id,
-        cid: jsonObjects[0].cid,
-        consumer_id: auth_user_id,
-        updated_by: auth_user_id,
-        created_by: auth_user_id,
-        file_type: uploadedFile.mimetype,
-        filename: uploadedFile.originalname,
-      }),
-    );
+      const existingFile = await this.fileRepository.findOne({
+        where: { brand_id, consumer_id: auth_user_id, cid: jsonObjects[0].id },
+      });
 
-    fs.unlinkSync(filePath);
+      if (existingFile) {
+        await this.fileRepository.update(existingFile.id, {
+          delete_flag: false,
+        });
 
-    return {
-      success: 'Y',
-      status: 200,
-      cid: file.cid,
-      filename: file.filename,
-    };
+        fs.unlinkSync(filePath);
+
+        return {
+          success: 'Y',
+          status: 200,
+          cid: existingFile.cid,
+          filename: existingFile.filename,
+        };
+      }
+
+      const file = await this.fileRepository.save(
+        new File({
+          brand_id,
+          cid: jsonObjects[0].cid,
+          consumer_id: auth_user_id,
+          updated_by: auth_user_id,
+          created_by: auth_user_id,
+          file_type: uploadedFile.mimetype,
+          filename: uploadedFile.originalname,
+        }),
+      );
+
+      fs.unlinkSync(filePath);
+
+      return {
+        success: 'Y',
+        status: 200,
+        cid: file.cid,
+        filename: file.filename,
+      };
+    } catch (error) {
+      throw new HttpException(ERROR_MESSAGE.FILE_NOT_UPLOADED, 500);
+    }
   }
 
   async deleteFile(
@@ -90,16 +113,18 @@ export class FileService {
       );
     }
 
-    let clusterUrl = process.env.CLUSTER_URL || 'http://localhost:9094';
+    try {
+      await this.fileRepository.update(file.id, { delete_flag: true });
 
-    const response = await axios.delete(`${clusterUrl}/pins/${cid}`);
-
-    return {
-      success: 'Y',
-      status: 200,
-      status_code: 200,
-      data: 'File has been deleted successfully',
-    };
+      return {
+        success: 'Y',
+        status: 200,
+        status_code: 200,
+        data: 'File has been deleted successfully',
+      };
+    } catch (error) {
+      throw new HttpException(ERROR_MESSAGE.FILE_NOT_DELETED, 500);
+    }
   }
 
   public getPublishLink(cid: string, filename: string) {

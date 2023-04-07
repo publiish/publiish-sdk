@@ -7,4 +7,5 @@ export interface ApiErrorResponse {
   summary: string;
   /** details for usage with payload validation */
   details?: Record<string, string[]>;
+  success: 'N';
 }
