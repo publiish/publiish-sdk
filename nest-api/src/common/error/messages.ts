@@ -55,4 +55,12 @@ export const ERROR_MESSAGE = {
     summary: 'File could not be found',
     code: ErrorCode.FILE_NOT_FOUND,
   },
+  [ErrorCode.FILE_NOT_UPLOADED]: {
+    summary: 'File not uploaded, something went wrong',
+    code: ErrorCode.FILE_NOT_UPLOADED,
+  },
+  [ErrorCode.FILE_NOT_DELETED]: {
+    summary: 'File not deleted, something went wrong',
+    code: ErrorCode.FILE_NOT_UPLOADED,
+  },
 };
