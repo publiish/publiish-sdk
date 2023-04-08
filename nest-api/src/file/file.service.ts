@@ -54,7 +54,7 @@ export class FileService {
         .map((s) => JSON.parse(s));
 
       const existingFile = await this.fileRepository.findOne({
-        where: { brand_id, consumer_id: auth_user_id, cid: jsonObjects[0].id },
+        where: { brand_id, consumer_id: auth_user_id, cid: jsonObjects[0].cid },
       });
 
       if (existingFile) {
