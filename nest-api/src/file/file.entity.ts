@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { instanceToPlain } from 'class-transformer';
 
-@Entity({name: "ipfs_upload"})
+@Entity()
 export class File {
   @PrimaryGeneratedColumn()
   id: number;
