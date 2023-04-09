@@ -32,9 +32,6 @@ services:
       SWARM_KEY: 2c2fa323fd396ac146abac7c7b9a99d2ca4a035644ab5207ed22570ff5bf8aa7
       # add space separated multiaddress as peer address
       PRIVATE_PEER_MUL_ADDR:  '/ip4/5.19.46.40/tcp/4001/p2p/12D3KooWAUvb3F69e9fCJ6AXwgZGEre3G59VFEVurgeyCYDvR51K'
-    networks:
-      - app-network
-
 
 
   
@@ -62,9 +59,6 @@ services:
           - "9096:9096" # Cluster swarm endpoint
     volumes:
       - /home/$USER/.compose/cluster:/data/ipfs-cluster
-    networks:
-      - app-network
-
 
     
   db:
@@ -83,9 +77,6 @@ services:
       # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
-    networks:
-      - app-network
-
 
 
   api:
@@ -113,9 +104,6 @@ services:
       NODE_ENV: development
     volumes:
       - ./tmp/upload:/app/tmp/upload
-    networks:
-      - app-network
-
 
   nginx:
     container_name: nginx-service
@@ -125,6 +113,4 @@ services:
 
 volumes:
   my-db:
-networks:
-  app-network:
 
