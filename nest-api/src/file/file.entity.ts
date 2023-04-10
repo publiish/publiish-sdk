@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { instanceToPlain } from 'class-transformer';
 
-@Entity("ipfs_upload") 
+@Entity('ipfs_upload')
 export class File {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,6 +23,9 @@ export class File {
 
   @Column({ length: 200 })
   cid: string;
+
+  @Column('int', { nullable: true })
+  file_size: number;
 
   @Column('int')
   brand_id: number;

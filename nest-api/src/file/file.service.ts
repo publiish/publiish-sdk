@@ -81,6 +81,7 @@ export class FileService {
           created_by: auth_user_id,
           file_type: uploadedFile.mimetype,
           filename: uploadedFile.originalname,
+          file_size: uploadedFile.size,
         }),
       );
 

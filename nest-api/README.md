@@ -71,3 +71,22 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Database manipulation
+
+```bash
+# drop database
+yarn run typeorm schema:drop
+
+# create tables, constraints, ...
+yarn run typeorm schema:sync
+
+# create migration
+yarn run migration:create ./migration/<ChangeDescriptionHere>
+
+# generate migration from changes in entities code
+yarn run typeorm migration:generate ./migrations/<ChangeDescriptionHere>
+
+# run migrations
+yarn run typeorm migration:run
+```
