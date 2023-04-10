@@ -25,8 +25,11 @@ const storage = multer.diskStorage({
   imports: [
     TypeOrmModule.forFeature([File]),
     MulterModule.register({
-      dest: '/app/tmp/uploads',
+      dest: '/app/tmp/upload',
       storage,
+      limits: {
+        fileSize: 10 * 1024 * 1024 * 1024, // limit to 10GB
+      },
     }),
   ],
   controllers: [FileController],
