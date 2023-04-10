@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Post,
   Query,
   Redirect,
@@ -27,7 +29,14 @@ export class FileController {
   @Post('file_add_update')
   @UseInterceptors(FileInterceptor('upload_file'))
   postFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 * 1024 }), // 10GB
+        ],
+      }),
+    )
+    file: Express.Multer.File,
     @Body() body: UploadFileDto,
   ): Promise<PostFileResponse> {
     const { brand_id, auth_user_id } = body;
