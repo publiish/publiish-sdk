@@ -2,8 +2,7 @@
 FROM node:16-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -17,8 +16,8 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
-WORKDIR /usr/src/app
-COPY --from=deps /usr/src/app/node_modules ./node_modules
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN mkdir -p /app/tmp/upload
 
@@ -34,7 +33,7 @@ RUN yarn build
 
 # Production image, copy all the files and run next
 FROM node:16-alpine AS runner
-WORKDIR /usr/src/app
+WORKDIR /app
 RUN mkdir -p ./tmp/upload
 RUN chmod -R u+w ./tmp/upload
 
@@ -42,8 +41,7 @@ ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=builder /usr/src/app /usr/src/app
-ENTRYPOINT node /usr/src/app/dist/main.js
+COPY --from=builder /app .
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nestjs
@@ -54,4 +52,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
