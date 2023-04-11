@@ -63,4 +63,12 @@ export const ERROR_MESSAGE = {
     summary: 'File not deleted, something went wrong',
     code: ErrorCode.FILE_NOT_UPLOADED,
   },
+  [ErrorCode.BRAND_ALREADY_EXISTS]: {
+    summary: 'Brand already exists',
+    code: ErrorCode.BRAND_ALREADY_EXISTS,
+  },
+  [ErrorCode.BRAND_DOES_NOT_EXIST]: {
+    summary: 'Brand does not exists',
+    code: ErrorCode.BRAND_DOES_NOT_EXIST,
+  },
 };
