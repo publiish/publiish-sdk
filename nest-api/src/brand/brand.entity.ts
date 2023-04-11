@@ -31,7 +31,7 @@ export class Brand {
   write_permission: boolean;
 
   @Column({ default: true })
-  read_permission: boolean;
+  delete_permission: boolean;
 
   constructor(partial: Partial<File>) {
     Object.assign(this, partial);
