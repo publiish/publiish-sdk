@@ -3,11 +3,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as FormData from 'form-data';
 import { Repository } from 'typeorm';
-import { DeleteFileResponse, PostFileResponse } from './types';
+import { ClusterFile, DeleteFileResponse, PostFileResponse } from './types';
 import { File } from './file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
 import { join } from 'path';
+import { parseClusterStringResponse } from './helpers';
 
 @Injectable()
 export class FileService {
@@ -45,16 +46,13 @@ export class FileService {
         },
       });
 
-      let ipfsData = typeof data !== 'string' ? JSON.stringify(data) : data;
-
-      const jsonStrings = ipfsData.split('\n');
-
-      const jsonObjects: any = jsonStrings
-        .filter((s) => s.length > 0)
-        .map((s) => JSON.parse(s));
+      let ipfsData: ClusterFile[] =
+        typeof data !== 'string'
+          ? data.data || [data]
+          : parseClusterStringResponse(data);
 
       const existingFile = await this.fileRepository.findOne({
-        where: { brand_id, consumer_id: auth_user_id, cid: jsonObjects[0].cid },
+        where: { brand_id, consumer_id: auth_user_id, cid: ipfsData[0].cid },
       });
 
       if (existingFile) {
@@ -75,7 +73,7 @@ export class FileService {
       const file = await this.fileRepository.save(
         new File({
           brand_id,
-          cid: jsonObjects[0].cid,
+          cid: ipfsData[0].cid,
           consumer_id: auth_user_id,
           updated_by: auth_user_id,
           created_by: auth_user_id,
