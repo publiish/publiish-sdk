@@ -11,3 +11,10 @@ export interface DeleteFileResponse extends CoreApiResponse {
   status_code?: number;
   data?: string;
 }
+
+export interface ClusterFile {
+  name: string;
+  cid: string;
+  size: number;
+  allocations: [ArrayBuffer];
+}
