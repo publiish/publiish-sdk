@@ -102,7 +102,7 @@ services:
     #   DATABASE_PASSWORD: 9cCSVkqNW1a3JZFiIkj1
     #   DATABASE_NAME: publishdev
     #   NODE_ENV: development
-    env_file: /nest-api/.env
+    env_file: ./nest-api/.env
     volumes:
       - ./tmp/upload:/app/tmp/upload
 
