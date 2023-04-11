@@ -92,16 +92,17 @@ services:
       - '3000'
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    environment:
-      CLUSTER_CONF_CID_VERSION: cid-version=1
-      CLUSTER_URL: http://cluster:9094
-      IPFS_URL: http://18.118.187.243
-      DATABASE_HOST: publish-dev.curymajyieos.eu-north-1.rds.amazonaws.com
-      DB_PORT: 3306
-      DATABASE_USER: admin
-      DATABASE_PASSWORD: 9cCSVkqNW1a3JZFiIkj1
-      DATABASE_NAME: publishdev
-      NODE_ENV: development
+    # environment:
+    #   CLUSTER_CONF_CID_VERSION: cid-version=1
+    #   CLUSTER_URL: http://cluster:9094
+    #   IPFS_URL: http://18.118.187.243
+    #   DATABASE_HOST: publish-dev.curymajyieos.eu-north-1.rds.amazonaws.com
+    #   DB_PORT: 3306
+    #   DATABASE_USER: admin
+    #   DATABASE_PASSWORD: 9cCSVkqNW1a3JZFiIkj1
+    #   DATABASE_NAME: publishdev
+    #   NODE_ENV: development
+    env_file: /nest-api/.env
     volumes:
       - ./tmp/upload:/app/tmp/upload
 
