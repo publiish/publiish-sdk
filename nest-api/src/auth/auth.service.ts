@@ -74,6 +74,7 @@ export class AuthService {
         brand_url: brand.brand_url,
       },
       process.env.JWT_SECRET,
+      { expiresIn: '1h' },
     );
 
     return {
