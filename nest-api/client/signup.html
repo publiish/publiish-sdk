@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <title>Login Form | CodingLab</title> -->
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <div class="title"><span>Sign Up Form</span></div>
+        <form id="signupForm" name="signup" method="POST" action="#">
+          <div class="row">
+            <i class="fas fa-user"></i>
+            <input
+              id="brand_name"
+              name="brand_name"
+              type="text"
+              placeholder="Brand Name"
+              required
+            />
+          </div>
+          <div class="row">
+            <i class="fas fa-user"></i>
+            <input
+              id="email"
+              name="email"
+              type="text"
+              placeholder="Email"
+              required
+            />
+          </div>
+          <div class="row">
+            <i class="fas fa-lock"></i>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <div class="row button">
+            <input type="submit" value="Login" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script>
+    let signupForm = document.getElementById('signupForm');
+
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      let email = document.getElementById('email').value;
+      let password = document.getElementById('password').value;
+      let brand_name = document.getElementById('brand_name').value;
+
+      if (!email || !password || !brand_name) {
+        return alert('All fields required!');
+      }
+
+      fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, brand_name }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('hellloooo ', data);
+          if (data.status === 200) {
+            alert('Successfully signed up');
+            email.value = '';
+            password.value = '';
+            brand_name.value = '';
+          } else {
+            alert('Something went wrong! ' + data.summary);
+          }
+        })
+        .catch((err) => {
+          console.log('something here');
+          alert('Something went wrong, ' + err.message);
+        });
+    });
+  </script>
+</html>
