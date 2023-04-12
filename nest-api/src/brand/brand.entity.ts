@@ -33,7 +33,7 @@ export class Brand {
   @Column({ default: true })
   delete_permission: boolean;
 
-  constructor(partial: Partial<File>) {
+  constructor(partial: Partial<Brand>) {
     Object.assign(this, partial);
   }
 
