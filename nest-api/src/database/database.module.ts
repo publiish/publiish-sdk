@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         // password:
         //   process.env.NODE_ENV !== 'development' &&
         //   process.env.DATABASE_PASSWORD,
-        // password: process.env.DATABASE_PASSWORD,
+         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         synchronize: false,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
