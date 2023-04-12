@@ -30,7 +30,10 @@ export class AuthService {
       );
     }
 
-    const hash = await bcrypt.hash(password, process.env.SALT_ROUNDS || 10);
+    const hash = await bcrypt.hash(
+      password,
+      Number(process.env.SALT_ROUNDS) || 10,
+    );
 
     const brand = await this.brandRepository.save(
       new Brand({ email, password: hash, brand_name }),
@@ -71,6 +74,7 @@ export class AuthService {
         brand_url: brand.brand_url,
       },
       process.env.JWT_SECRET,
+      { expiresIn: '1h' },
     );
 
     return {
