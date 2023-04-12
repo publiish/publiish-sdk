@@ -11,7 +11,9 @@ import {
   Redirect,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from './../auth/auth.guard';
 import { FileService } from './file.service';
 import { DeleteFileResponse, PostFileResponse } from './types';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -25,7 +27,7 @@ export class FileController {
   getHello() {
     return this.fileService.getHello();
   }
-
+  @UseGuards(AuthGuard)
   @Post('file_add_update')
   @UseInterceptors(FileInterceptor('upload_file'))
   postFile(
@@ -43,7 +45,7 @@ export class FileController {
 
     return this.fileService.postFile(file, brand_id, auth_user_id);
   }
-
+  @UseGuards(AuthGuard)
   @Delete('file_delete')
   deleteFile(
     @Body() { brand_id, auth_user_id, cid }: DeleteFileDto,
