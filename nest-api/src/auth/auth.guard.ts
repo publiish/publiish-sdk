@@ -6,10 +6,18 @@ import {
   } from '@nestjs/common';
   import { JwtService } from '@nestjs/jwt';
   import { Request } from 'express';
+  import { Brand } from 'src/brand/brand.entity';
+  import { Repository } from 'typeorm';
+  import { InjectRepository } from '@nestjs/typeorm';
+
+
+
   
   @Injectable()
   export class AuthGuard implements CanActivate {
-    constructor(private jwtService: JwtService) {}
+    constructor(private jwtService: JwtService,
+      @InjectRepository(Brand)
+    private brandRepository: Repository<Brand>,) {}
   
     async canActivate(context: ExecutionContext): Promise<boolean> {
       const request = context.switchToHttp().getRequest();
@@ -26,7 +34,16 @@ import {
         );
         // 💡 We're assigning the payload to the request object here
         // so that we can access it in our route handlers
-        request['user'] = payload;
+        const brand = await this.brandRepository.findOne({ where: { id:payload.id } });
+        
+        const route=request.route.path;
+        if(route=="/api/files/file_delete" && !brand.delete_permission){
+          
+          throw new UnauthorizedException();
+        }
+        if(route=="/api/files/file_add_update" && !brand.write_permission){
+          throw new UnauthorizedException();
+        }
       } catch {
         throw new UnauthorizedException();
       }

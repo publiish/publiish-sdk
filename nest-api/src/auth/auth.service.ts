@@ -72,6 +72,7 @@ export class AuthService {
         email: brand.email,
         brand_name: brand.brand_name,
         brand_url: brand.brand_url,
+        id: brand.id,
       },
       process.env.JWT_SECRET,
       { expiresIn: '1h' },
