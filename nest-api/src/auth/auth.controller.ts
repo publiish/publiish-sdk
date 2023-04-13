@@ -12,9 +12,9 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { SignInDto, SignUpDto } from './dto';
+import { SignInDto, SignUpDto, PermissionDto } from './dto';
 import { AuthService } from './auth.service';
-import { SigninResponse, SignupResponse } from './types';
+import { SigninResponse, SignupResponse,BrandResponse,PermissionResponse } from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -33,4 +33,15 @@ export class AuthController {
 
     return this.authService.signin(email, password);
   }
+
+  @Post('change_permission')
+  change_permission(@Body() body: PermissionDto): Promise<PermissionResponse> {
+    const { id, coloumn,action } = body;
+    return this.authService.change_permission(id, coloumn,action);
+  }
+  @Get('brands')
+  brands(): Promise<BrandResponse> {
+    return this.authService.get_brands();
+  }
+ 
 }

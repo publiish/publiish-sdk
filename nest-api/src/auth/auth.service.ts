@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
 import { Brand } from 'src/brand/brand.entity';
-import { SigninResponse, SignupResponse } from './types';
+import { SigninResponse, SignupResponse,BrandResponse,PermissionResponse } from './types';
 
 @Injectable()
 export class AuthService {
@@ -48,6 +48,17 @@ export class AuthService {
     };
   }
 
+  async get_brands():  Promise<BrandResponse> {
+    const brands= await this.brandRepository.find();
+
+    return {
+      success: 'Y',
+      status: 200,
+      brands,
+    };
+    
+}
+
   async signin(email: string, password: string): Promise<SigninResponse> {
     const brand = await this.brandRepository.findOne({ where: { email } });
 
@@ -83,5 +94,37 @@ export class AuthService {
       status: 200,
       access_token,
     };
+  }
+
+
+  async change_permission(id: number, coloumn: string, action: boolean): Promise<PermissionResponse> {
+    try {
+
+      if(coloumn=="write_permission"){
+        await this.brandRepository.update(id, {
+          write_permission: action,
+        });
+      }
+
+      if(coloumn=="delete_permission"){
+        await this.brandRepository.update(id, {
+          delete_permission: action,
+        });
+      }
+
+      return {
+        success: 'Y',
+        status: 200,
+        Message:"Permission changed succefully.",
+      };
+    } catch (error) {
+      return {
+        success: 'N',
+        status: 200,
+        Message:"Something went wrong.",
+      };
+    }
+    
+    
   }
 }
