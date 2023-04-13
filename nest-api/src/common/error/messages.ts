@@ -71,4 +71,8 @@ export const ERROR_MESSAGE = {
     summary: 'Brand does not exists',
     code: ErrorCode.BRAND_DOES_NOT_EXIST,
   },
+  [ErrorCode.BRAND_OR_EMAIL_ALREADY_EXISTS]: {
+    summary: 'Brand or email already exists',
+    code: ErrorCode.BRAND_OR_EMAIL_ALREADY_EXISTS,
+  },
 };
