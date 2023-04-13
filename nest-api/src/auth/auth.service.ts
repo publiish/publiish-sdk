@@ -20,12 +20,12 @@ export class AuthService {
     brand_name: string,
   ): Promise<SignupResponse> {
     const existingBrand = await this.brandRepository.findOne({
-      where: { email, brand_name },
+      where: [{ email }, { brand_name }],
     });
 
     if (existingBrand) {
       throw new HttpException(
-        ERROR_MESSAGE.BRAND_ALREADY_EXISTS,
+        ERROR_MESSAGE.BRAND_OR_EMAIL_ALREADY_EXISTS,
         HttpStatus.CONFLICT,
       );
     }
@@ -62,7 +62,7 @@ export class AuthService {
 
     if (!isMatch) {
       throw new HttpException(
-        ERROR_MESSAGE.INVALID_PASSWORD,
+        ERROR_MESSAGE.INCORRECT_CREDENTIALS,
         HttpStatus.BAD_REQUEST,
       );
     }
