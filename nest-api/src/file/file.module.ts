@@ -6,6 +6,7 @@ import { File } from './file.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import { JwtModule } from '@nestjs/jwt';
+import { Brand } from 'src/brand/brand.entity';
 
 import * as fs from 'fs';
 
@@ -26,6 +27,7 @@ const storage = multer.diskStorage({
 @Module({
   imports: [
     TypeOrmModule.forFeature([File]),
+    TypeOrmModule.forFeature([Brand]),
     MulterModule.register({
       dest: '/app/tmp/upload',
       storage,
