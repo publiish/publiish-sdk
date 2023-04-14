@@ -14,13 +14,6 @@ const linkStyles = {
 export const Sidebar: React.FC = () => {
   const router = useRouter();
 
-  console.log("router ", router.pathname === PAGES[0].path);
-  console.log(
-    `flex flex-row items-center h-10 px-3 rounded-lg text-gray-700 ${
-      PAGES[0].path === router.pathname ? "bg-gray-100}" : ""
-    }`
-  );
-
   return (
     <aside className="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-primary-700">
       <div className="sidebar-header flex items-center justify-center py-4">
@@ -35,7 +28,7 @@ export const Sidebar: React.FC = () => {
       <div className="sidebar-content px-4 py-6">
         <ul className="flex flex-col w-full">
           {PAGES.map((page) => (
-            <li className="my-2">
+            <li key={page.name} className="my-2">
               <Link
                 href={page.path}
                 className={`${linkStyles.default} ${linkStyles.hover} ${
