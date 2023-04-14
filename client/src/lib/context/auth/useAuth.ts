@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { SigninData } from "@/api/auth/types";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
@@ -7,16 +7,21 @@ import { signin } from "@/api/auth/Signin";
 
 export const useAuth = () => {
   const { user, addUser, removeUser } = useUser();
+  const [loading, setLoading] = useState(true);
   const { getItem } = useLocalStorage();
 
   useEffect(() => {
-    const token = getItem("token");
+    (async () => {
+      setLoading(true);
+      const token = getItem("token");
 
-    if (token) {
-      const user = jwt_decode(token) as User;
+      if (token) {
+        const user = jwt_decode(token) as User;
 
-      addUser(user, token);
-    }
+        await addUser(user, token);
+      }
+      setLoading(false);
+    })();
   }, []);
 
   const login = async (body: SigninData) => {
@@ -31,5 +36,5 @@ export const useAuth = () => {
     removeUser();
   };
 
-  return { user, login, logout };
+  return { user, login, logout, loading };
 };

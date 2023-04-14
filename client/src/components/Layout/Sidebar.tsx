@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { AiOutlineUnlock } from "react-icons/ai";
 import { PAGES } from "@/enum/pages";
 import Link from "next/link";
+import { useAuth } from "@/lib/context/auth/useAuth";
 
 const linkStyles = {
   default: "flex flex-row items-center h-10 px-3 rounded-lg text-gray-300",
@@ -13,6 +14,7 @@ const linkStyles = {
 
 export const Sidebar: React.FC = () => {
   const router = useRouter();
+  const { logout } = useAuth();
 
   return (
     <aside className="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-primary-700">
@@ -44,15 +46,19 @@ export const Sidebar: React.FC = () => {
           ))}
 
           <li className="my-px">
-            <a
-              href="#"
+            <Link
+              href=""
+              onClick={async () => {
+                await logout();
+                router.push("/signin");
+              }}
               className="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
             >
               <span className="flex justify-center text-lg text-red-400">
                 <AiOutlineUnlock />
               </span>
               <span className="ml-3">Logout</span>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

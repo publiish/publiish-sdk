@@ -1,5 +1,10 @@
 import { Layout } from "@/components/Layout/Layout";
+import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute";
 
 export default function Dashboard() {
-  return <Layout title="Dashboard"></Layout>;
+  return (
+    <ProtectedRoute>
+      <Layout title="Dashboard"></Layout>;
+    </ProtectedRoute>
+  );
 }

@@ -1,5 +1,7 @@
 import { useAuth } from "@/lib/context/auth/useAuth";
 import { Sidebar } from "./Sidebar";
+import { BsPersonCircle } from "react-icons/bs";
+import Link from "next/link";
 
 interface LayoutProps {
   children?: React.ReactElement;
@@ -8,7 +10,6 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   const { user } = useAuth();
-  console.log(user);
 
   return (
     <div className="flex flex-row min-h-screen bg-gray-100 text-gray-800">
@@ -17,17 +18,14 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         <header className="header bg-white shadow py-4 px-4">
           <div className="header-content flex items-center flex-row">
             <div className="flex ml-auto">
-              <a className="flex flex-row items-center">
-                <img
-                  src="https://pbs.twimg.com/profile_images/378800000298815220/b567757616f720812125bfbac395ff54_normal.png"
-                  className="h-10 w-10 bg-gray-200 border rounded-full"
-                />
+              <Link href="/profile" className="flex flex-row items-center">
+                <BsPersonCircle />
                 <span className="flex flex-col ml-2">
                   <span className="truncate w-20 font-semibold tracking-wide leading-none">
                     {user?.brand_name}
                   </span>
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </header>
