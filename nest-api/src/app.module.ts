@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
     FileModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../', 'client'),
+      serveRoot: '/admin',
       exclude: ['/api/(.*)'],
     }),
   ],

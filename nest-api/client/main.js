@@ -1,5 +1,5 @@
 (function($) {
-
+	
 	fetch('/api/auth/brands', {
         method: 'GET',
         headers: {
@@ -47,7 +47,7 @@
 			var isTrueSet = (action === 'true');
 
 
-			fetch('api/auth/change_permission', {
+			fetch('/api/auth/change_permission', {
 				method: 'POST',
 				headers: {
 				  'Content-Type': 'application/json',
