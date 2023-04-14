@@ -1,3 +1,4 @@
+import { useAuth } from "@/lib/context/auth/useAuth";
 import { Sidebar } from "./Sidebar";
 
 interface LayoutProps {
@@ -6,6 +7,9 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+  const { user } = useAuth();
+  console.log(user);
+
   return (
     <div className="flex flex-row min-h-screen bg-gray-100 text-gray-800">
       <Sidebar />
@@ -20,10 +24,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 />
                 <span className="flex flex-col ml-2">
                   <span className="truncate w-20 font-semibold tracking-wide leading-none">
-                    John Doe
-                  </span>
-                  <span className="truncate w-20 text-gray-500 text-xs leading-none mt-1">
-                    Manager
+                    {user?.brand_name}
                   </span>
                 </span>
               </a>

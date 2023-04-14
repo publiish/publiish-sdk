@@ -10,7 +10,7 @@ export async function apiRequest<D = {}, R = unknown>({
   responseType,
 }: AxiosRequestConfig<D>) {
   return await axios.request<D, AxiosResponse<R>>({
-    url: `${PUBLISH_API_URL}/${url}`,
+    url: `${PUBLISH_API_URL}/api${url}`,
     method,
     data,
     headers,
