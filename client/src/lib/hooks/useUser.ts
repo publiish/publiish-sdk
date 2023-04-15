@@ -3,7 +3,7 @@ import { useLocalStorage } from "./useLocalStorage";
 import { AuthContext } from "../context/auth/AuthContext";
 
 export interface User {
-  id: string;
+  id: number;
   brand_name: string;
   brand_url: string;
   email: string;
