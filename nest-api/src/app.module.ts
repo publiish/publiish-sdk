@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { FileModule } from './file/file.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { BrandModule } from './brand/brand.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
     DatabaseModule,
     AuthModule,
     FileModule,
+    BrandModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../', 'client'),
       serveRoot: '/admin',
