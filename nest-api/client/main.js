@@ -39,7 +39,10 @@
           alert('Something went wrong, ' + err.message);
         });
 		$(document).on("click", ".action_button", function(){
-		
+			let text = "Are you sure you want to update the permission ?";
+    if (confirm(text) == true) {
+    
+
 
 			var id=parseInt($(this).attr('data-id'));
 			var coloumn=$(this).attr('data-coloumn');
@@ -69,7 +72,7 @@
 				.catch((err) => {
 				  alert('Something went wrong, ' + err.message);
 				});
-
+    }
 			
 		});
 
