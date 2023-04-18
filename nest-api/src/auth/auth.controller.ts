@@ -14,7 +14,12 @@ import {
 } from '@nestjs/common';
 import { SignInDto, SignUpDto, PermissionDto } from './dto';
 import { AuthService } from './auth.service';
-import { SigninResponse, SignupResponse,BrandResponse,PermissionResponse } from './types';
+import {
+  SigninResponse,
+  SignupResponse,
+  BrandResponse,
+  PermissionResponse,
+} from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -36,12 +41,11 @@ export class AuthController {
 
   @Post('change_permission')
   change_permission(@Body() body: PermissionDto): Promise<PermissionResponse> {
-    const { id, coloumn,action } = body;
-    return this.authService.change_permission(id, coloumn,action);
+    const { id, coloumn, action } = body;
+    return this.authService.change_permission(id, coloumn, action);
   }
   @Get('brands')
   brands(): Promise<BrandResponse> {
     return this.authService.get_brands();
   }
- 
 }
