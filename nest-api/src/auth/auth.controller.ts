@@ -11,6 +11,7 @@ import {
   Redirect,
   UploadedFile,
   UseInterceptors,
+  Headers,
 } from '@nestjs/common';
 import { SignInDto, SignUpDto, PermissionDto } from './dto';
 import { AuthService } from './auth.service';
@@ -33,10 +34,13 @@ export class AuthController {
   }
 
   @Post('signin')
-  signin(@Body() body: SignInDto): Promise<SigninResponse> {
+  signin(
+    @Body() body: SignInDto,
+    @Headers('referer') referer?: string,
+  ): Promise<SigninResponse> {
     const { email, password } = body;
 
-    return this.authService.signin(email, password);
+    return this.authService.signin(email, password, referer);
   }
 
   @Post('change_permission')

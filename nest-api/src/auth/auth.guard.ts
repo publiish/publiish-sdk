@@ -13,6 +13,7 @@ import { Brand } from 'src/brand/brand.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
+import { isInvalidEndpoint } from './helpers/validateSubDomain';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -44,13 +45,10 @@ export class AuthGuard implements CanActivate {
 
       const referer: string = request.headers['referer'];
 
-      if (
-        referer &&
-        brand.sub_domain &&
-        !referer.startsWith(brand.sub_domain)
-      ) {
-        console.log('helloooo ', brand.sub_domain, referer);
+      console.log(brand);
+      console.log('referer ', referer);
 
+      if (isInvalidEndpoint(brand, referer)) {
         throw new UnauthorizedException();
       }
 

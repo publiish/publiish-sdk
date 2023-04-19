@@ -1,6 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
@@ -12,6 +17,7 @@ import {
   PermissionResponse,
 } from './types';
 import { JwtService } from '@nestjs/jwt';
+import { isInvalidEndpoint } from './helpers/validateSubDomain';
 
 @Injectable()
 export class AuthService {
@@ -76,6 +82,13 @@ export class AuthService {
       throw new HttpException(
         ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
         HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (isInvalidEndpoint(brand, referer)) {
+      throw new HttpException(
+        ERROR_MESSAGE.ACCESS_TOKEN_DENIED,
+        HttpStatus.UNAUTHORIZED,
       );
     }
 
