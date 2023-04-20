@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { Brand } from 'src/brand/brand.entity';
 import { CoreApiResponse } from 'src/interfaces/coreApiResponse';
 
@@ -13,4 +14,8 @@ export interface SigninResponse extends CoreApiResponse {
 }
 export interface PermissionResponse extends CoreApiResponse {
   Message: string;
+}
+
+export interface RequestWithUser extends Request {
+  user: Brand;
 }

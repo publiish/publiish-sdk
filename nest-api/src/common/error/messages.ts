@@ -79,4 +79,8 @@ export const ERROR_MESSAGE = {
     summary: 'Access token denied',
     code: ErrorCode.ACCESS_TOKEN_DENIED,
   },
+  [ErrorCode.BRAND_ID_DOES_NOT_MATCH]: {
+    summary: 'Brand ID does not match',
+    code: ErrorCode.BRAND_ID_DOES_NOT_MATCH,
+  },
 };

@@ -25,7 +25,15 @@ export class FileService {
     uploadedFile: Express.Multer.File,
     brand_id: number,
     auth_user_id: number,
+    loggedInUserId: number,
   ): Promise<PostFileResponse> {
+    if (Number(brand_id) !== loggedInUserId) {
+      throw new HttpException(
+        ERROR_MESSAGE.BRAND_ID_DOES_NOT_MATCH,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     let clusterUrl = process.env.CLUSTER_URL || 'http://localhost:9094';
     //add endpoint
     clusterUrl += '/add';
@@ -100,7 +108,15 @@ export class FileService {
     brand_id: number,
     auth_user_id: number,
     cid: string,
+    loggedInUserId: number,
   ): Promise<DeleteFileResponse> {
+    if (Number(brand_id) !== loggedInUserId) {
+      throw new HttpException(
+        ERROR_MESSAGE.BRAND_ID_DOES_NOT_MATCH,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     const file = await this.fileRepository.findOne({
       where: { brand_id, consumer_id: auth_user_id, cid },
     });
