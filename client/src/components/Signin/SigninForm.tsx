@@ -2,6 +2,7 @@ import { AiOutlineLock } from "react-icons/ai";
 import { useFormik } from "formik";
 import { useAuth } from "@/lib/context/auth/useAuth";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 export default function SigninForm() {
   const { login } = useAuth();
@@ -16,8 +17,8 @@ export default function SigninForm() {
       try {
         await login(values);
         router.push("/dashboard");
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        toast(error.message || "Something went wrong", { type: "error" });
       }
     },
   });
