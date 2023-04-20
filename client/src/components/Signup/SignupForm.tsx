@@ -1,6 +1,7 @@
 import { signup } from "@/api/auth/Singup";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -15,8 +16,8 @@ export default function SignupForm() {
       try {
         await signup(values);
         router.push("/signin");
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        toast(error.message || "Something went wrong", { type: "error" });
       }
     },
   });

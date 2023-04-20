@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/context/auth/useAuth";
 import { useEffect, useState } from "react";
 import { BsFiles } from "react-icons/bs";
 import { TiCloudStorageOutline } from "react-icons/ti";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -22,8 +23,9 @@ export default function Dashboard() {
           const { data } = await getStats(user.id);
           setStats(data.data);
           setLoading(false);
-        } catch (error) {
+        } catch (error: any) {
           setLoading(false);
+          toast(error.message || "Something went wrong", { type: "error" });
           console.log(error);
         }
       })();
