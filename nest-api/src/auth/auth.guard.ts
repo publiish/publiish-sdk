@@ -41,12 +41,11 @@ export class AuthGuard implements CanActivate {
 
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = payload;
-
-      const referer: string = request.headers['referer'];
+      request['user'] = brand;
 
       console.log(brand);
-      console.log('referer ', referer);
+
+      const referer: string = request.headers['referer'];
 
       if (isInvalidEndpoint(brand, referer)) {
         throw new UnauthorizedException();

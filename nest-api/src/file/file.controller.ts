@@ -12,12 +12,17 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Head,
+  Headers,
+  Request,
 } from '@nestjs/common';
 import { AuthGuard } from './../auth/auth.guard';
 import { FileService } from './file.service';
 import { DeleteFileResponse, PostFileResponse } from './types';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DeleteFileDto, UploadFileDto } from './dto';
+import { Brand } from 'src/brand/brand.entity';
+import { RequestWithUser } from 'src/auth/types';
 
 @Controller('files')
 export class FileController {
@@ -40,17 +45,19 @@ export class FileController {
     )
     file: Express.Multer.File,
     @Body() body: UploadFileDto,
+    @Request() { user }: RequestWithUser,
   ): Promise<PostFileResponse> {
     const { brand_id, auth_user_id } = body;
 
-    return this.fileService.postFile(file, brand_id, auth_user_id);
+    return this.fileService.postFile(file, brand_id, auth_user_id, user.id);
   }
   @UseGuards(AuthGuard)
   @Delete('file_delete')
   deleteFile(
     @Body() { brand_id, auth_user_id, cid }: DeleteFileDto,
+    @Request() { user }: RequestWithUser,
   ): Promise<DeleteFileResponse> {
-    return this.fileService.deleteFile(brand_id, auth_user_id, cid);
+    return this.fileService.deleteFile(brand_id, auth_user_id, cid, user.id);
   }
 
   // @Get('publish-link/:cid')
