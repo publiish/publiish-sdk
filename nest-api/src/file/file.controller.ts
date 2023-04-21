@@ -27,7 +27,7 @@ export class FileController {
   getHello() {
     return this.fileService.getHello();
   }
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('file_add_update')
   @UseInterceptors(FileInterceptor('upload_file'))
   postFile(
