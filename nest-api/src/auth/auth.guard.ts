@@ -9,11 +9,11 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { Brand } from 'src/brand/brand.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
 import { isInvalidEndpoint } from './helpers/validateSubDomain';
+import { Brand } from 'src/brand/brand.entity';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
