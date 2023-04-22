@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import { BRAND_MOCK } from 'src/brand/mocks';
 import { SigninResponse, SignupResponse } from './types';
 
@@ -12,3 +13,6 @@ export const SIGNIN_RESPONSE_MOCK: SigninResponse = {
   success: 'Y',
   access_token: 'access token',
 };
+
+export const PASSWORD_HASH_MOCK = async () =>
+  await bcrypt.hash('Password12@', 10);
