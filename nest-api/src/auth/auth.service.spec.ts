@@ -13,6 +13,7 @@ import {
   SIGNUP_RESPONSE_MOCK,
 } from './mocks';
 import { HttpException } from '@nestjs/common';
+import { AuthController } from './auth.controller';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -29,7 +30,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthService],
+      controllers: [AuthController],
       providers: [TEST_PROVIDER.BRAND_REPO, AuthService, JwtService],
     }).compile();
 
