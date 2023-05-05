@@ -9,6 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
 import { join } from 'path';
 import { parseClusterStringResponse } from './helpers';
+import { Readable } from 'stream';
+import { FileInfo } from 'busboy';
 
 @Injectable()
 export class FileService {
@@ -22,7 +24,8 @@ export class FileService {
   }
 
   async postFile(
-    uploadedFile: Express.Multer.File,
+    fileStream: Buffer,
+    fileInfo: FileInfo,
     brand_id: number,
     auth_user_id: number,
   ): Promise<PostFileResponse> {
@@ -34,15 +37,13 @@ export class FileService {
       clusterUrl += '?' + process.env.CLUSTER_CONF_CID_VERSION;
     }
 
-    const filePath = join(uploadedFile.destination, uploadedFile.filename);
-
     const form = new FormData();
-    form.append('file', fs.createReadStream(filePath));
+    form.append('file', fileStream, { filename: fileInfo.filename });
 
     try {
       const { data } = await axios.post(clusterUrl, form, {
         headers: {
-          'Content-Type': `multipart/form-data: boundary=${form.getBoundary()}`,
+          'Content-Type': `multipart/form-data: boundary=${form.getBoundary()}}`,
         },
       });
 
@@ -60,8 +61,6 @@ export class FileService {
           delete_flag: false,
         });
 
-        fs.unlinkSync(filePath);
-
         return {
           success: 'Y',
           status: 200,
@@ -77,13 +76,11 @@ export class FileService {
           consumer_id: auth_user_id,
           updated_by: auth_user_id,
           created_by: auth_user_id,
-          file_type: uploadedFile.mimetype,
-          filename: uploadedFile.originalname,
-          file_size: uploadedFile.size,
+          file_type: fileInfo.mimeType,
+          filename: fileInfo.filename,
+          file_size: ipfsData[0].size,
         }),
       );
-
-      fs.unlinkSync(filePath);
 
       return {
         success: 'Y',
@@ -92,6 +89,8 @@ export class FileService {
         filename: file.filename,
       };
     } catch (error) {
+      console.log('error ', error.message);
+
       throw new HttpException(ERROR_MESSAGE.FILE_NOT_UPLOADED, 500);
     }
   }
