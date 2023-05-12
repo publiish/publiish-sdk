@@ -43,8 +43,6 @@ export class AuthGuard implements CanActivate {
       // so that we can access it in our route handlers
       request['user'] = brand;
 
-      console.log(brand);
-
       const referer: string = request.headers['referer'];
 
       if (isInvalidEndpoint(brand, referer)) {

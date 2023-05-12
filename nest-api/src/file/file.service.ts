@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as FormData from 'form-data';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ClusterFile, DeleteFileResponse, PostFileResponse } from './types';
 import { File } from './file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +11,8 @@ import { join } from 'path';
 import { parseClusterStringResponse } from './helpers';
 import { Readable } from 'stream';
 import { FileInfo } from 'busboy';
+import { RequestWithUser } from 'src/auth/types';
+import mime from 'mime-types';
 
 @Injectable()
 export class FileService {
@@ -24,8 +26,7 @@ export class FileService {
   }
 
   async postFile(
-    fileStream: Buffer,
-    fileInfo: FileInfo,
+    req: RequestWithUser,
     brand_id: number,
     auth_user_id: number,
     loggedInUserId: number,
@@ -45,13 +46,10 @@ export class FileService {
       clusterUrl += '?' + process.env.CLUSTER_CONF_CID_VERSION;
     }
 
-    const form = new FormData();
-    form.append('file', fileStream, { filename: fileInfo.filename });
-
     try {
-      const { data } = await axios.post(clusterUrl, form, {
+      const { data } = await axios.post(clusterUrl, req, {
         headers: {
-          'Content-Type': `multipart/form-data: boundary=${form.getBoundary()}}`,
+          'Content-Type': req.headers['content-type'], // which is multipart/form-data with boundary included
         },
       });
 
@@ -60,41 +58,41 @@ export class FileService {
           ? data.data || [data]
           : parseClusterStringResponse(data);
 
-      const existingFile = await this.fileRepository.findOne({
-        where: { brand_id, consumer_id: auth_user_id, cid: ipfsData[0].cid },
+      const existingFiles = await this.fileRepository.find({
+        where: {
+          brand_id,
+          consumer_id: auth_user_id,
+          cid: In(ipfsData.map((ipfsFile) => ipfsFile.cid)),
+        },
       });
 
-      if (existingFile) {
-        await this.fileRepository.update(existingFile.id, {
-          delete_flag: false,
-        });
-
+      const files = ipfsData.map((ipfsFile) => {
+        const existingFile = existingFiles.find(
+          (existing) => existing.cid === ipfsFile.cid,
+        );
         return {
-          success: 'Y',
-          status: 200,
-          cid: existingFile.cid,
-          filename: existingFile.filename,
-        };
-      }
-
-      const file = await this.fileRepository.save(
-        new File({
+          ...(existingFile ? { id: existingFile.id } : {}),
           brand_id,
-          cid: ipfsData[0].cid,
+          cid: ipfsFile.cid,
           consumer_id: auth_user_id,
           updated_by: auth_user_id,
           created_by: auth_user_id,
-          file_type: fileInfo.mimeType,
-          filename: fileInfo.filename,
-          file_size: ipfsData[0].size,
-        }),
-      );
+          file_type: mime.lookup(ipfsFile.name) || 'N/A',
+          filename: ipfsFile.name,
+          file_size: ipfsFile.size,
+          delete_flag: false,
+        };
+      });
+
+      const savedFiles = await this.fileRepository.save(files);
 
       return {
         success: 'Y',
         status: 200,
-        cid: file.cid,
-        filename: file.filename,
+        data: savedFiles.map((file) => ({
+          cid: file.cid,
+          filename: file.filename,
+        })),
       };
     } catch (error) {
       console.log('error ', error.message);
