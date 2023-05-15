@@ -1,0 +1,13 @@
+import { Brand } from './brand.entity';
+
+export const BRAND_MOCK: Brand = {
+  id: 1,
+  brand_name: 'brand name',
+  brand_url: 'http://brand.com',
+  dao_id: 1,
+  write_permission: true,
+  delete_permission: true,
+  email: 'brand@email.com',
+  sub_domain: 'http://sub.brand.com',
+  toJSON: () => [],
+};

@@ -106,6 +106,19 @@ services:
     volumes:
       - ./tmp/upload:/app/tmp/upload
 
+  client:
+    container_name: publiish_client
+    depends_on:
+      - api
+    build: ./client
+    restart: on-failure
+    ports:
+      - "4000:4000"
+    expose:
+      # Opens port 3306 on the container
+      - '4000'
+    env_file: ./client/.env.local
+
   nginx:
     container_name: nginx-service
     build: ./nginx

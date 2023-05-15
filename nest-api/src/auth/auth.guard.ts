@@ -1,57 +1,69 @@
 import {
-    CanActivate,
-    ExecutionContext,
-    Injectable,
-    UnauthorizedException,
-  } from '@nestjs/common';
-  import { JwtService } from '@nestjs/jwt';
-  import { Request } from 'express';
-  import { Brand } from 'src/brand/brand.entity';
-  import { Repository } from 'typeorm';
-  import { InjectRepository } from '@nestjs/typeorm';
+  BadRequestException,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ERROR_MESSAGE } from 'src/common/error/messages';
+import { isInvalidEndpoint } from './helpers/validateSubDomain';
+import { Brand } from 'src/brand/brand.entity';
 
+@Injectable()
+export class AuthGuard implements CanActivate {
+  constructor(
+    private jwtService: JwtService,
+    @InjectRepository(Brand)
+    private brandRepository: Repository<Brand>,
+  ) {}
 
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const httpContext = context.switchToHttp();
+    const request = httpContext.getRequest();
 
-  
-  @Injectable()
-  export class AuthGuard implements CanActivate {
-    constructor(private jwtService: JwtService,
-      @InjectRepository(Brand)
-    private brandRepository: Repository<Brand>,) {}
-  
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-      const request = context.switchToHttp().getRequest();
-      const token = this.extractTokenFromHeader(request);
-      if (!token) {
+    const token = this.extractTokenFromHeader(request);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+      const brand = await this.brandRepository.findOne({
+        where: { id: payload.id },
+      });
+
+      // 💡 We're assigning the payload to the request object here
+      // so that we can access it in our route handlers
+      request['user'] = brand;
+
+      const referer: string = request.headers['referer'];
+
+      if (isInvalidEndpoint(brand, referer)) {
         throw new UnauthorizedException();
       }
-      try {
-        const payload = await this.jwtService.verifyAsync(
-          token,
-          {
-            secret: process.env.JWT_SECRET,
-          }
-        );
-        // 💡 We're assigning the payload to the request object here
-        // so that we can access it in our route handlers
-        const brand = await this.brandRepository.findOne({ where: { id:payload.id } });
-        
-        const route=request.route.path;
-        if(route=="/api/files/file_delete" && !brand.delete_permission){
-          
-          throw new UnauthorizedException();
-        }
-        if(route=="/api/files/file_add_update" && !brand.write_permission){
-          throw new UnauthorizedException();
-        }
-      } catch {
+
+      const route = request.route.path;
+      if (route == '/api/files/file_delete' && !brand.delete_permission) {
         throw new UnauthorizedException();
       }
-      return true;
+      if (route == '/api/files/file_add_update' && !brand.write_permission) {
+        throw new UnauthorizedException();
+      }
+    } catch {
+      throw new UnauthorizedException();
     }
-  
-    private extractTokenFromHeader(request: Request): string | undefined {
-      const [type, token] = request.headers.authorization?.split(' ') ?? [];
-      return type === 'Bearer' ? token : undefined;
-    }
+    return true;
   }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
+  }
+}

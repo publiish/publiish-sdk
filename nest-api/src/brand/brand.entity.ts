@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { instanceToPlain } from 'class-transformer';
+import { Exclude, instanceToPlain } from 'class-transformer';
 
 @Entity('brands')
 export class Brand {
@@ -24,8 +24,12 @@ export class Brand {
   @Column({ length: 100, nullable: true })
   email?: string;
 
+  @Exclude()
   @Column({ length: 100, nullable: true })
   password?: string;
+
+  @Column({ length: 200, nullable: true })
+  sub_domain?: string;
 
   @Column({ default: true })
   write_permission: boolean;

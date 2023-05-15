@@ -75,4 +75,12 @@ export const ERROR_MESSAGE = {
     summary: 'Brand or email already exists',
     code: ErrorCode.BRAND_OR_EMAIL_ALREADY_EXISTS,
   },
+  [ErrorCode.ACCESS_TOKEN_DENIED]: {
+    summary: 'Access token denied',
+    code: ErrorCode.ACCESS_TOKEN_DENIED,
+  },
+  [ErrorCode.BRAND_ID_DOES_NOT_MATCH]: {
+    summary: 'Brand ID does not match',
+    code: ErrorCode.BRAND_ID_DOES_NOT_MATCH,
+  },
 };
