@@ -45,7 +45,7 @@ export class FileController {
   //   return this.fileService.postFile(file, brand_id, auth_user_id);
   // }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('file_add_update')
   async postFile(
     @Req() req: RequestWithUser,
@@ -55,7 +55,7 @@ export class FileController {
       req,
       brand_id,
       auth_user_id,
-      req.user.id,
+      // req.user.id,
     );
 
     return result;

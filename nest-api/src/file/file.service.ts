@@ -29,14 +29,14 @@ export class FileService {
     req: RequestWithUser,
     brand_id: number,
     auth_user_id: number,
-    loggedInUserId: number,
+    // loggedInUserId: number,
   ): Promise<PostFileResponse> {
-    if (Number(brand_id) !== loggedInUserId) {
-      throw new HttpException(
-        ERROR_MESSAGE.BRAND_ID_DOES_NOT_MATCH,
-        HttpStatus.FORBIDDEN,
-      );
-    }
+    // if (Number(brand_id) !== loggedInUserId) {
+    //   throw new HttpException(
+    //     ERROR_MESSAGE.BRAND_ID_DOES_NOT_MATCH,
+    //     HttpStatus.FORBIDDEN,
+    //   );
+    // }
 
     let clusterUrl = process.env.CLUSTER_URL || 'http://localhost:9094';
     //add endpoint
