@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumberString, IsString } from 'class-validator';
 
 export class DeleteFileDto {
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
+  @IsNumberString()
   brand_id: number;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
+  @IsNumberString()
   auth_user_id: number;
 
   @ApiProperty()

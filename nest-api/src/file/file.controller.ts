@@ -61,13 +61,13 @@ export class FileController {
     return result;
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Delete('file_delete')
   deleteFile(
     @Query() { brand_id, auth_user_id, cid }: DeleteFileDto,
     @Request() { user }: RequestWithUser,
   ): Promise<DeleteFileResponse> {
-    return this.fileService.deleteFile(brand_id, auth_user_id, cid, user.id);
+    return this.fileService.deleteFile(brand_id, auth_user_id, cid, user?.id);
   }
 
   // @Get('publish-link/:cid')

@@ -107,12 +107,12 @@ export class FileService {
     cid: string,
     loggedInUserId: number,
   ): Promise<DeleteFileResponse> {
-    if (Number(brand_id) !== loggedInUserId) {
-      throw new HttpException(
-        ERROR_MESSAGE.BRAND_ID_DOES_NOT_MATCH,
-        HttpStatus.FORBIDDEN,
-      );
-    }
+    // if (Number(brand_id) !== loggedInUserId) {
+    //   throw new HttpException(
+    //     ERROR_MESSAGE.BRAND_ID_DOES_NOT_MATCH,
+    //     HttpStatus.FORBIDDEN,
+    //   );
+    // }
 
     const file = await this.fileRepository.findOne({
       where: { brand_id, consumer_id: auth_user_id, cid },
