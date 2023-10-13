@@ -16,6 +16,7 @@ import { FileService } from './file.service';
 import { DeleteFileResponse, PostFileResponse } from './types';
 import { DeleteFileDto, UploadFileDto } from './dto';
 import { RequestWithUser } from 'src/auth/types';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @Controller('files')
 export class FileController {
@@ -78,6 +79,7 @@ export class FileController {
   //   return this.fileService.getPublishLink(cid, filename);
   // }
 
+  @SkipThrottle()
   @Get('publish-link/:cid')
   @Redirect(process.env.IPFS_URL || 'http://localhost:8080')
   getPublishLink(
@@ -91,6 +93,7 @@ export class FileController {
     };
   }
 
+  @SkipThrottle()
   @Get('download/:cid')
   @Redirect(process.env.IPFS_URL || 'http://localhost:8080')
   getDocs(@Param('cid') cid: string, @Query('filename') filename: string) {
