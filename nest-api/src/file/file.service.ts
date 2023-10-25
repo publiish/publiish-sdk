@@ -46,10 +46,30 @@ export class FileService {
       clusterUrl += '?' + process.env.CLUSTER_CONF_CID_VERSION;
     }
 
+    function generateBoundary() {
+      return `--${new Date()
+        .toISOString()
+        .replace(/[-:.]/g, '')}-${Math.random().toString(36).substring(2)}`;
+    }
+
+    const boundary = generateBoundary();
+
+    const contentTypeHeaderIndex = req.rawHeaders.indexOf('Content-Type');
+    let contentType = 'multipart/form-data; boundary=' + boundary;
+
+    if (
+      contentTypeHeaderIndex !== -1 &&
+      contentTypeHeaderIndex < req.rawHeaders.length - 1
+    ) {
+      // Use the Content-Type header from req.rawHeaders
+      contentType = req.rawHeaders[contentTypeHeaderIndex + 1];
+    }
+
     try {
       const { data } = await axios.post(clusterUrl, req, {
         headers: {
-          'Content-Type': req.headers['content-type'], // which is multipart/form-data with boundary included
+          'Content-Type': contentType,
+          ...req.headers,
         },
       });
 
