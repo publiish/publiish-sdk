@@ -29,7 +29,8 @@ services:
       - /home/$USER/export:/export
     environment:
       # this is the key to allow membership in private IPFS swarm. 
-      SWARM_KEY: 2c2fa323fd396ac146abac7c7b9a99d2ca4a035644ab5207ed22570ff5bf8aa7
+      # SWARM_KEY: 2c2fa323fd396ac146abac7c7b9a99d2ca4a035644ab5207ed22570ff5bf8aa7
+      SWARM_KEY: b6d67ba93cc0d8faf0274b3aaf1da351b4de46f22d81af2a4f92cc012c19e409
       # add space separated multiaddress as peer address
       PRIVATE_PEER_MUL_ADDR:  '/ip4/5.19.46.40/tcp/4001/p2p/12D3KooWAUvb3F69e9fCJ6AXwgZGEre3G59VFEVurgeyCYDvR51K'
 
@@ -42,7 +43,8 @@ services:
       - ipfs
     environment:
       CLUSTER_PEERNAME: cluster
-      CLUSTER_SECRET: 190355e6838d1823bcb1ce727c83d7accfad3d226fe58b37fb0d6b830a11c082 #same as other 
+      # CLUSTER_SECRET: 190355e6838d1823bcb1ce727c83d7accfad3d226fe58b37fb0d6b830a11c082 #same as other 
+      CLUSTER_SECRET: 8ff2fbcd44f572a55e909a25d090310cdc7c2a87667977422735cf942afedf9b
       CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs/tcp/5001
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
       CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
@@ -79,32 +81,35 @@ services:
       - my-db:/var/lib/mysql
 
 
-  # api:
-  #   container_name: nest-api
-  #   depends_on:
-  #     - db
-  #   build: ./nest-api
-  #   restart: on-failure
-  #   ports:
-  #     - "3000:3000"
-  #   expose:
-  #     # Opens port 3306 on the container
-  #     - '3000'
-  #   extra_hosts:
-  #     - "host.docker.internal:host-gateway"
-  #   # environment:
-  #   #   CLUSTER_CONF_CID_VERSION: cid-version=1
-  #   #   CLUSTER_URL: http://cluster:9094
-  #   #   IPFS_URL: http://18.118.187.243
-  #   #   DATABASE_HOST: publish-dev.curymajyieos.eu-north-1.rds.amazonaws.com
-  #   #   DB_PORT: 3306
-  #   #   DATABASE_USER: admin
-  #   #   DATABASE_PASSWORD: 9cCSVkqNW1a3JZFiIkj1
-  #   #   DATABASE_NAME: publishdev
-  #   #   NODE_ENV: development
-  #   env_file: ./nest-api/.env
-  #   volumes:
-  #     - ./tmp/upload:/app/tmp/upload
+  api:
+    container_name: nest-api
+    depends_on:
+      - db
+    build: ./nest-api
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    expose:
+      # Opens port 3306 on the container
+      - '3000'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # environment:
+    #   CLUSTER_CONF_CID_VERSION: cid-version=1
+    #   CLUSTER_URL: http://127.0.0.1:9094
+    #   IPFS_URL: http://127.0.0.1:5001
+    #   # DATABASE_HOST: publish-dev.curymajyieos.eu-north-1.rds.amazonaws.com
+    #   DATABASE_HOST: 20.222.105.67
+    #   DB_PORT: 3306
+    #   DATABASE_USER: root
+    #   # DATABASE_PASSWORD: 9cCSVkqNW1a3JZFiIkj1
+    #   DATABASE_PASSWORD: password
+    #   # DATABASE_NAME: publishdev
+    #   DATABASE_NAME: publiish_local
+    #   NODE_ENV: development
+    env_file: ./nest-api/.env
+    volumes:
+      - ./tmp/upload:/app/tmp/upload
 
   # client:
   #   container_name: publiish_client
