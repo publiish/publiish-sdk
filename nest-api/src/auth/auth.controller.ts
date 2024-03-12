@@ -48,6 +48,7 @@ export class AuthController {
     const { id, coloumn, action } = body;
     return this.authService.change_permission(id, coloumn, action);
   }
+  
   @Get('brands')
   brands(): Promise<BrandResponse> {
     return this.authService.get_brands();

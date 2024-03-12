@@ -23,7 +23,7 @@ export class BrandService {
     if (!brand) {
       throw new HttpException(
         ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
-        HttpStatus.CONFLICT,
+        HttpStatus.NOT_FOUND,
       );
     }
 
