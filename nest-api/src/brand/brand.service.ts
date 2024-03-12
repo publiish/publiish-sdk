@@ -22,7 +22,7 @@ export class BrandService {
 
     if (!brand) {
       throw new HttpException(
-        ERROR_MESSAGE.BRAND_OR_EMAIL_ALREADY_EXISTS,
+        ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
         HttpStatus.CONFLICT,
       );
     }
