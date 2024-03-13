@@ -5,6 +5,7 @@ import * as FormData from 'form-data';
 import { In, Repository } from 'typeorm';
 import { ClusterFile, DeleteFileResponse, PostFileResponse } from './types';
 import { File } from './file.entity';
+import { Brand } from 'src/brand/brand.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGE } from 'src/common/error/messages';
 import { join } from 'path';
@@ -19,6 +20,8 @@ export class FileService {
   constructor(
     @InjectRepository(File)
     private fileRepository: Repository<File>,
+    @InjectRepository(Brand)
+    private brandRepository: Repository<Brand>,
   ) {}
 
   async getHello(): Promise<File[]> {
@@ -37,6 +40,15 @@ export class FileService {
     //     HttpStatus.FORBIDDEN,
     //   );
     // }
+
+    const brand = await this.brandRepository.findOne({ where: { id: brand_id } });
+
+    if (!brand) {
+      throw new HttpException(
+        ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
     let clusterUrl = process.env.CLUSTER_URL || 'http://localhost:9094';
     //add endpoint
@@ -134,6 +146,15 @@ export class FileService {
     //   );
     // }
 
+    const brand = await this.brandRepository.findOne({ where: { id: brand_id } });
+
+    if (!brand) {
+      throw new HttpException(
+        ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    
     const file = await this.fileRepository.findOne({
       where: { brand_id, consumer_id: auth_user_id, cid },
     });
