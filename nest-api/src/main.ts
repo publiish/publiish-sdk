@@ -6,6 +6,12 @@ import { ValidationException } from './common/error/validation-exception';
 import { AllExceptionsFilter } from './common/error/all-exceptions-filter';
 
 async function bootstrap() {
+  const hostIpAddress = process.env.HOST_IP ?? "127.0.0.1";
+  const appListeningPort = process.env.APP_PORT ?? 3000;
+
+  const serverUrlLocalhost = `http://localhost:${appListeningPort}`;
+  const serverUrl = `http://${hostIpAddress}:${appListeningPort}`;
+
   const app = await NestFactory.create(AppModule);
 
   app.enableCors();
@@ -26,14 +32,14 @@ async function bootstrap() {
     .setDescription('Description of Publiish API endpoints.')
     .setVersion('1.0')
     .addTag('publiish_api')
-    .addServer('http://localhost:3000')
-    .addServer('http://18.118.187.243:3000')
+    .addServer(serverUrlLocalhost)
+    .addServer(serverUrl)
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 
   SwaggerModule.setup('swagger', app, swaggerDocument);
 
-  await app.listen(3000);
+  await app.listen(appListeningPort);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
