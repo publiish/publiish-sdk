@@ -146,6 +146,15 @@ export class FileService {
     //   );
     // }
 
+    const brand = await this.brandRepository.findOne({ where: { id: brand_id } });
+
+    if (!brand) {
+      throw new HttpException(
+        ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    
     const file = await this.fileRepository.findOne({
       where: { brand_id, consumer_id: auth_user_id, cid },
     });
