@@ -10,6 +10,8 @@ import {
   UseGuards,
   Request,
   Req,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthGuard } from './../auth/auth.guard';
 import { FileService } from './file.service';
@@ -17,6 +19,7 @@ import { DeleteFileResponse, PostFileResponse } from './types';
 import { DeleteFileDto, UploadFileDto } from './dto';
 import { RequestWithUser } from 'src/auth/types';
 import { SkipThrottle } from '@nestjs/throttler';
+import { Response } from 'express';
 
 @Controller('files')
 export class FileController {
@@ -60,6 +63,27 @@ export class FileController {
     );
 
     return result;
+  }
+
+  @Post('file_chunk_add')
+  postChunkFile(
+    @Req() req: RequestWithUser,
+    @Query() { brand_id, auth_user_id }: UploadFileDto,
+    @Res() res: Response
+  ) {
+    try {
+      this.fileService.postChunkFile(
+        req,
+        brand_id,
+        auth_user_id,
+        // req.user.id,
+        res
+      );
+      // res.status(HttpStatus.NO_CONTENT).send();
+    } catch (error) {
+      console.log('err', error)
+    }
+
   }
 
   // @UseGuards(AuthGuard)

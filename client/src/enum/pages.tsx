@@ -1,4 +1,4 @@
-import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineUser, AiOutlineCloudUpload } from "react-icons/ai";
 
 export const PAGES = [
   {
@@ -10,5 +10,10 @@ export const PAGES = [
     name: "Profile",
     path: "/profile",
     icon: <AiOutlineUser />,
+  },
+  {
+    name: "Upload File",
+    path: "/upload",
+    icon: <AiOutlineCloudUpload />,
   },
 ];
