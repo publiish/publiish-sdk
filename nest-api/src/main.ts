@@ -26,7 +26,7 @@ async function bootstrap() {
       exceptionFactory: (errors) => new ValidationException(errors),
     }),
   );
-
+  
   const swaggerConfig = new DocumentBuilder()
     .setTitle('publiish-api')
     .setDescription('Description of Publiish API endpoints.')

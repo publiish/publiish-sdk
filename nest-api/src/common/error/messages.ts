@@ -63,6 +63,10 @@ export const ERROR_MESSAGE = {
     summary: 'File not deleted, something went wrong',
     code: ErrorCode.FILE_NOT_UPLOADED,
   },
+  [ErrorCode.IPNS_NOT_PUBLISHED]: {
+    summary: 'IPNS not published, something went wrong',
+    code: ErrorCode.IPNS_NOT_PUBLISHED,
+  },
   [ErrorCode.BRAND_ALREADY_EXISTS]: {
     summary: 'Brand already exists',
     code: ErrorCode.BRAND_ALREADY_EXISTS,

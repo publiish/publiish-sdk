@@ -9,6 +9,7 @@ import { BrandModule } from './brand/brand.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { IpnsModule } from './ipns/ipns.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { APP_GUARD } from '@nestjs/core';
     }),
     AuthModule,
     FileModule,
+    IpnsModule,
     BrandModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../', 'client'),
