@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { IpnsService } from "./ipns.service";
-import { IpnsController } from "./ipns.controller";
+import { IpnsService } from "./ipns.service.js";
+import { IpnsController } from "./ipns.controller.js";
 
 @Module({
     imports: [],

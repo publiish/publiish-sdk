@@ -3,18 +3,18 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import FormData from 'form-data';
 import { In, Repository } from 'typeorm';
-import { ClusterFile, DeleteFileResponse, PostFileResponse } from './types';
-import { File } from './file.entity';
-import { Brand } from 'src/brand/brand.entity';
+import { ClusterFile, DeleteFileResponse, PostFileResponse } from './types.js';
+import { File } from './file.entity.js';
+import { Brand } from '../brand/brand.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ERROR_MESSAGE } from 'src/common/error/messages';
+import { ERROR_MESSAGE } from '../common/error/messages.js';
 import path, { join } from 'path';
-import { parseClusterStringResponse } from './helpers';
+import { parseClusterStringResponse } from './helpers/index.js';
 import { Readable } from 'stream';
 import { FileInfo } from 'busboy';
-import { RequestWithUser } from 'src/auth/types';
+import { RequestWithUser } from '../auth/types.js';
 import mime from 'mime-types';
-import chunkReceive, { cleanChunks } from 'src/lib/chunk-receiver';
+import chunkReceive, { cleanChunks } from '../lib/chunk-receiver.js';
 import { Response } from 'express';
 
 @Injectable()

@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
+  "type": "module",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
@@ -49,6 +50,7 @@
     "multiformats": "^13.1.0",
     "multihashing-async": "^2.1.4",
     "reflect-metadata": "^0.1.13",
+    "@apillon/ipfs-kubo-rpc-http-client": "github:Apillon/ipfs-kubo-rpc-http-client",
     "rxjs": "^7.2.0"
   },
   "devDependencies": {

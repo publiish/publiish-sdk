@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FileController } from './file.controller';
-import { FileService } from './file.service';
-import { File } from './file.entity';
+import { FileController } from './file.controller.js';
+import { FileService } from './file.service.js';
+import { File } from './file.entity.js';
 import { MulterModule } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import { JwtModule } from '@nestjs/jwt';
-import { Brand } from 'src/brand/brand.entity';
+import { Brand } from '../brand/brand.entity.js';
 
 import * as fs from 'fs';
 

@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationException } from './common/error/validation-exception';
-import { AllExceptionsFilter } from './common/error/all-exceptions-filter';
+import { ValidationException } from './common/error/validation-exception.js';
+import { AllExceptionsFilter } from './common/error/all-exceptions-filter.js';
 
 async function bootstrap() {
   const hostIpAddress = process.env.HOST_IP ?? "127.0.0.1";

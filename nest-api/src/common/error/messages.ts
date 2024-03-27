@@ -1,4 +1,4 @@
-import { ErrorCode } from './codes';
+import { ErrorCode } from './codes.js';
 
 export const ERROR_MESSAGE = {
   [ErrorCode.USER_ALREADY_EXIST]: {

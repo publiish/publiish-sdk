@@ -1,4 +1,4 @@
-import { ErrorCode } from './codes';
+import { ErrorCode } from './codes.js';
 
 export interface ApiErrorResponse {
   /** error code for handling edge cases */
