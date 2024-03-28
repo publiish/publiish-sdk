@@ -45,12 +45,12 @@ export class FileService {
 
     const brand = await this.brandRepository.findOne({ where: { id: brand_id } });
 
-    if (!brand) {
-      throw new HttpException(
-        ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    // if (!brand) {
+    //   throw new HttpException(
+    //     ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
+    //     HttpStatus.NOT_FOUND,
+    //   );
+    // }
 
     let clusterUrl = process.env.CLUSTER_URL || 'http://localhost:9094';
     //add endpoint

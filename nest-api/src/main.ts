@@ -32,7 +32,7 @@ async function bootstrap() {
     .setDescription('Description of Publiish API endpoints.')
     .setVersion('1.0')
     .addTag('publiish_api')
-    .addServer(serverUrlLocalhost)
+    // .addServer(serverUrlLocalhost)
     .addServer(serverUrl)
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
