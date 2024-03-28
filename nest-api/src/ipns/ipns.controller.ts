@@ -38,9 +38,19 @@ export class IpnsController {
             keyName: keyName,
             cid: cid
         });
-        console.log('11111111', result);
         return result;
+    }
 
+    @Get(':ipnsname')
+    async resolveIpns(
+        @Req() req: RequestWithUser,
+        @Param('ipnsname') ipnsname: string,
+    ) {
+        const result = await this.ipnsService.resolveIpns({
+            cid: ipnsname
+        });
+
+        return result;
     }
     
 }

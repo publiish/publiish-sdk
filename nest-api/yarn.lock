@@ -76,12 +76,6 @@
     "ora" "5.4.1"
     "rxjs" "6.6.7"
 
-"@apillon/ipfs-kubo-rpc-http-client@github:Apillon/ipfs-kubo-rpc-http-client":
-  "resolved" "git+ssh://git@github.com/Apillon/ipfs-kubo-rpc-http-client.git#798c91934c24366f62e029696c0e8bfab7ddc455"
-  "version" "0.0.8"
-  dependencies:
-    "axios" "^1.6.7"
-
 "@assemblyscript/loader@^0.9.4":
   "integrity" "sha512-HazVq9zwTVwGmqdwYzu7WyQ6FQVZ7SwET0KKQuKm55jD0IfUpZgN0OPIiZG3zV1iSrVYcN0bdwLRXI/VNCYsUA=="
   "resolved" "https://registry.npmjs.org/@assemblyscript/loader/-/loader-0.9.4.tgz"
@@ -4483,7 +4477,7 @@
   "resolved" "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"
   "version" "0.4.0"
 
-"axios@^1.3.4", "axios@^1.6.7":
+"axios@^1.3.4":
   "integrity" "sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-1.6.8.tgz"
   "version" "1.6.8"

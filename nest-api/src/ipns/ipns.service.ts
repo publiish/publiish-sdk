@@ -5,9 +5,10 @@ import { base36 } from 'multiformats/bases/base36';
 import { ipns } from '@helia/ipns';
 import { CID } from 'multiformats';
 import { ERROR_MESSAGE } from "../common/error/messages.js";
-import { IpnsKeyResponse, IpnsPublishResponse } from "./types";
+import { IpnsKeyResponse, IpnsPublishResponse, IpnsResolveResponse } from "./types.js";
 import { createHelia } from 'helia'
-import { Key as IpnsKey, Name as IpnsName } from '@apillon/ipfs-kubo-rpc-http-client';
+import { Key as IpnsKey, Name as IpnsName } from '../lib/ipfs-http-client/index.js';
+
 @Injectable()
 export class IpnsService {
 
@@ -17,7 +18,7 @@ export class IpnsService {
         const ipnsKeyClass = new IpnsKey(process.env.IPFS_API_URL);
         const keyInfo = await ipnsKeyClass.gen({
             name: args.name,
-            type: 'Ed25519'
+            type: 'ed25519'
         })
 
         return {
@@ -34,7 +35,7 @@ export class IpnsService {
 
         const ipnsEntry = await name.publish({
             cid: cid.toV1().toString(),
-            key: undefined,
+            key: args.keyName,
             resolve: true
         });
         
@@ -48,6 +49,24 @@ export class IpnsService {
             },
         };
         
+    }
+
+    async resolveIpns(args: {cid: string}) : Promise<IpnsResolveResponse> {
+        const name = new IpnsName(process.env.IPFS_API_URL);
+
+        const ipnsRecord = await name.resolve({
+            cid: args.cid,
+            recursive: true,
+        })
+
+        return {
+            success: 'Y',
+            status: 200,
+            data: {
+                path: ipnsRecord.Path, 
+            },
+        };
+
     }
 }
 
