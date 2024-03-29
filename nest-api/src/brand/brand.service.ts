@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ERROR_MESSAGE } from 'src/common/error/messages';
-import { Brand } from 'src/brand/brand.entity';
-import { StatsResponse } from './types';
-import { File } from 'src/file/file.entity';
+import { ERROR_MESSAGE } from '../common/error/messages.js';
+import { Brand } from '../brand/brand.entity.js';
+import { StatsResponse } from './types.js';
+import { File } from '../file/file.entity.js';
 
 @Injectable()
 export class BrandService {

@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
-import { ERROR_MESSAGE } from './messages';
-import { ApiErrorResponse } from './types';
+import { ERROR_MESSAGE } from './messages.js';
+import { ApiErrorResponse } from './types.js';
 
 export class ApiError extends Error {
   response: ApiErrorResponse;

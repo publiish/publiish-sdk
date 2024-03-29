@@ -1,4 +1,4 @@
-import { CoreApiResponse } from 'src/interfaces/coreApiResponse';
+import { CoreApiResponse } from 'src/interfaces/coreApiResponse.js';
 
 export interface StatsResponse extends CoreApiResponse {
   data: {

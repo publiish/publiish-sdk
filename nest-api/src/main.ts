@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationException } from './common/error/validation-exception';
-import { AllExceptionsFilter } from './common/error/all-exceptions-filter';
+import { ValidationException } from './common/error/validation-exception.js';
+import { AllExceptionsFilter } from './common/error/all-exceptions-filter.js';
 
 async function bootstrap() {
   const hostIpAddress = process.env.HOST_IP ?? "127.0.0.1";
@@ -26,13 +26,13 @@ async function bootstrap() {
       exceptionFactory: (errors) => new ValidationException(errors),
     }),
   );
-
+  
   const swaggerConfig = new DocumentBuilder()
     .setTitle('publiish-api')
     .setDescription('Description of Publiish API endpoints.')
     .setVersion('1.0')
     .addTag('publiish_api')
-    .addServer(serverUrlLocalhost)
+    // .addServer(serverUrlLocalhost)
     .addServer(serverUrl)
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);

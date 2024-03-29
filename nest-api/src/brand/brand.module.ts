@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Brand } from 'src/brand/brand.entity';
-import { BrandController } from './brand.controller';
-import { BrandService } from './brand.service';
-import { File } from 'src/file/file.entity';
+import { Brand } from '../brand/brand.entity.js';
+import { BrandController } from './brand.controller.js';
+import { BrandService } from './brand.service.js';
+import { File } from '../file/file.entity.js';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Brand, File])],

@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { Brand } from 'src/brand/brand.entity';
-import { CoreApiResponse } from 'src/interfaces/coreApiResponse';
+import { Brand } from 'src/brand/brand.entity.js';
+import { CoreApiResponse } from 'src/interfaces/coreApiResponse.js';
 
 export interface SignupResponse extends CoreApiResponse {
   brand: Brand;
