@@ -1,68 +1,120 @@
-version: '3'
-# This adds first ipfs node and first cluster node in the network 
-# needs to bootstrap to self manually 
+version: '3.4'
+
+# This is an example docker-compose file to quickly test an IPFS Cluster
+# with multiple peers on a contained environment.
+
+# It runs 3 cluster peers (cluster0, cluster1...) attached to go-ipfs daemons
+# (ipfs0, ipfs1...) using the CRDT consensus component. Cluster peers
+# autodiscover themselves using mDNS on the docker internal network.
+#
+# To interact with the cluster use "ipfs-cluster-ctl" (the cluster0 API port is
+# exposed to the locahost. You can also "docker exec -ti cluster0 sh" and run
+# it from the container. "ipfs-cluster-ctl peers ls" should show all 3 peers a few
+# seconds after start.
+#
+# For persistance, a "data" folder is created and used to store configurations
+# and states. This can be used to edit configurations in subsequent runs. It looks
+# as follows:
+#
+# data/
+# |-- cluster0
+# |-- cluster1
+# |-- ...
+# |-- ipfs0
+# |-- ipfs1
+# |-- ...
+#
+# During the first start, default configurations are created for all peers.
 
 services:
 
-##################################################################################
-## Cluster PEER <0> ##############################################################
-##################################################################################
+  # cluster peer0
 
-  ipfs:
-    container_name: ipfs
-    build: ./first-node/compose
+  ipfs0:
+    container_name: ipfs0
+    image: ipfs/kubo:v0.15.0
     ports:
-      # ipfs swarm - expose to communicate with other peers
-      - "4001:4001" 
-      # ipfs api - expose to communicate with ipfs-api
-      - "127.0.0.1:5001:5001" 
-      # ipfs gateway - expose if needed/wanted
-      - "127.0.0.1:8080:8080" 
-    expose:
-      # Opens port 8080 on the container
-      - '8080'
-    volumes:
-      #./compose/ipfs0 path for local IPFS persistent data. Better not to comment it
-      - /home/$USER/.compose/ipfs:/data/ipfs
-      # map a local dirctory to act like shared directory between host and ipfs instance
-      # comment it if not needed
-      - /home/$USER/export:/export
+      - "4001:4001" # ipfs swarm - expose if needed/wanted
+      - "5001:5001" # ipfs api - expose if needed/wanted
+      - "8080:8080" # ipfs gateway - expose if needed/wanted
     environment:
-      # this is the key to allow membership in private IPFS swarm. 
-      # SWARM_KEY: 2c2fa323fd396ac146abac7c7b9a99d2ca4a035644ab5207ed22570ff5bf8aa7
       SWARM_KEY: b6d67ba93cc0d8faf0274b3aaf1da351b4de46f22d81af2a4f92cc012c19e409
-      # add space separated multiaddress as peer address
-      PRIVATE_PEER_MUL_ADDR:  '/ip4/5.19.46.40/tcp/4001/p2p/12D3KooWAUvb3F69e9fCJ6AXwgZGEre3G59VFEVurgeyCYDvR51K'
 
+    volumes:
+      - ./data/ipfs0:/data/ipfs
 
-  
-  cluster:
-    container_name: cluster
+  cluster0:
+    container_name: cluster0
     image: ipfs/ipfs-cluster:latest
     depends_on:
-      - ipfs
+      - ipfs0
     environment:
-      CLUSTER_PEERNAME: cluster
-      # CLUSTER_SECRET: 190355e6838d1823bcb1ce727c83d7accfad3d226fe58b37fb0d6b830a11c082 #same as other 
-      CLUSTER_SECRET: 8ff2fbcd44f572a55e909a25d090310cdc7c2a87667977422735cf942afedf9b
-      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs/tcp/5001
+      CLUSTER_PEERNAME: cluster0
+      CLUSTER_SECRET: ${CLUSTER_SECRET} # From shell variable if set
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
       CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
       CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
-      CLUSTER_REPLICATIONFACTORMIN: 1 # Minimum numbers of ipfs nodes to pin in. throws error if not able to pin to min
-      CLUSTER_REPLICATIONFACTORMAX: 4 # Maximum numbers of ipfs nodes to pin in. Do not throws error if not able to pin to max
-      CLUSTER_PEERADDRESSES:  '/ip4/5.19.46.40/tcp/9096/p2p/12D3KooWKaTfSm6YkiU9yDuS7qAp34nUfb3cDtuKkxcWPtSZsQ6K'
     ports:
           # Open API port (allows ipfs-cluster-ctl usage on host)
-          - "127.0.0.1:9094:9094"
+          - "9094:9094"
           # The cluster swarm port would need  to be exposed if this container
           # was to connect to cluster peers on other hosts.
-          # - "9095:9095" # Cluster IPFS Proxy endpoint
-          - "9096:9096" # Cluster swarm endpoint
+          # But this is just a testing cluster.
+          # - "9096:9096" # Cluster IPFS Proxy endpoint
     volumes:
-      - /home/$USER/.compose/cluster:/data/ipfs-cluster
+      - ./data/cluster0:/data/ipfs-cluster
 
-    
+
+  # cluster peer1
+
+  ipfs1:
+    container_name: ipfs1
+    image: ipfs/kubo:v0.15.0
+    volumes:
+      - ./data/ipfs1:/data/ipfs
+    environment:
+      SWARM_KEY: b6d67ba93cc0d8faf0274b3aaf1da351b4de46f22d81af2a4f92cc012c19e409
+
+  cluster1:
+    container_name: cluster1
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs1
+    environment:
+      CLUSTER_PEERNAME: cluster1
+      CLUSTER_SECRET: ${CLUSTER_SECRET}
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs1/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*'
+      CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
+    volumes:
+      - ./data/cluster1:/data/ipfs-cluster
+
+
+  # cluster peer2
+
+  ipfs2:
+    container_name: ipfs2
+    image: ipfs/kubo:v0.15.0
+    volumes:
+      - ./data/ipfs2:/data/ipfs
+    environment:
+      SWARM_KEY: b6d67ba93cc0d8faf0274b3aaf1da351b4de46f22d81af2a4f92cc012c19e409
+
+  cluster2:
+    container_name: cluster2
+    image: ipfs/ipfs-cluster:latest
+    depends_on:
+      - ipfs2
+    environment:
+      CLUSTER_PEERNAME: cluster2
+      CLUSTER_SECRET: ${CLUSTER_SECRET}
+      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs2/tcp/5001
+      CLUSTER_CRDT_TRUSTEDPEERS: '*'
+      CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
+    volumes:
+      - ./data/cluster2:/data/ipfs-cluster
+
   db:
     container_name: database
     image: mysql
@@ -80,56 +132,5 @@ services:
     volumes:
       - my-db:/var/lib/mysql
 
-
-  # api:
-  #   container_name: nest-api
-  #   depends_on:
-  #     - db
-  #   build: ./nest-api
-  #   restart: on-failure
-  #   ports:
-  #     - "3000:3000"
-  #   expose:
-  #     # Opens port 3306 on the container
-  #     - '3000'
-  #   extra_hosts:
-  #     - "host.docker.internal:host-gateway"
-  #   # environment:
-  #   #   CLUSTER_CONF_CID_VERSION: cid-version=1
-  #   #   CLUSTER_URL: http://127.0.0.1:9094
-  #   #   IPFS_URL: http://127.0.0.1:5001
-  #   #   # DATABASE_HOST: publish-dev.curymajyieos.eu-north-1.rds.amazonaws.com
-  #   #   DATABASE_HOST: 20.222.105.67
-  #   #   DB_PORT: 3306
-  #   #   DATABASE_USER: root
-  #   #   # DATABASE_PASSWORD: 9cCSVkqNW1a3JZFiIkj1
-  #   #   DATABASE_PASSWORD: password
-  #   #   # DATABASE_NAME: publishdev
-  #   #   DATABASE_NAME: publiish_local
-  #   #   NODE_ENV: development
-  #   env_file: ./nest-api/.env
-  #   volumes:
-  #     - ./tmp/upload:/app/tmp/upload
-
-  # client:
-  #   container_name: publiish_client
-  #   depends_on:
-  #     - api
-  #   build: ./client
-  #   restart: on-failure
-  #   ports:
-  #     - "4000:4000"
-  #   expose:
-  #     # Opens port 3306 on the container
-  #     - '4000'
-  #   env_file: ./client/.env.local
-
-  nginx:
-    container_name: nginx-service
-    build: ./nginx
-    ports:
-      - "80:80"
-
 volumes:
   my-db:
-
