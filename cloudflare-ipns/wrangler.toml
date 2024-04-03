@@ -1,0 +1,9 @@
+name = "cloudflare-ipns"
+main = "src/index.ts"
+compatibility_date = "2024-04-03"
+[durable_objects]
+bindings = [{ name = "IPNS_DURABLE_OBJECT", class_name = "IPNSRecordDO" }]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["IPNSRecordDO"]
