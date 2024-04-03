@@ -90,3 +90,46 @@ yarn run typeorm migration:generate ./migrations/<ChangeDescriptionHere>
 # run migrations
 yarn run typeorm migration:run
 ```
+
+## IPNS Api usecase
+
+```bash
+# create a key
+curl -X POST "http://localhost:3000/api/ipns/keys/name=<key name>"
+
+# response
+  {
+    "success": "Y",
+    "status": 200,
+    "data": {
+      "name": "<key name>",
+      "id": "k51qzi5uqu5dhfj6360sf8em5yvyakvbvt4j4k97ftboqgssl3uw59c9fkjrui"
+    }
+  }
+
+# publish ipns name
+curl -X POST "http://localhost:3000/api/ipns/publish/<key name>/<ipfs cid>/?brand_id=<brand id>&auth_user_id=<auth user id>"
+
+# response
+  {
+    "success": "Y",
+    "status": 200,
+    "data": {
+      "path": "/ipfs/bafybeic4mgktpbv5nxvydzuxud6o7yr2lmyqyqvkdvsh2viuxtzjybne3i",
+      "cid": "k51qzi5uqu5dhfj6360sf8em5yvyakvbvt4j4k97ftboqgssl3uw59c9fkjrui"
+    }
+  }
+
+# resolve ipns name
+curl "http://localhost:3000/api/ipns/<ipns name hash>"
+
+# response
+  {
+    "success": "Y",
+    "status": 200,
+    "data": {
+      "path": "/ipfs/bafybeic4mgktpbv5nxvydzuxud6o7yr2lmyqyqvkdvsh2viuxtzjybne3i"
+    }
+  }
+
+```

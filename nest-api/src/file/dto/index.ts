@@ -1,2 +1,2 @@
-export * from './UploadFileDto';
-export * from './DeleteFileDto';
+export * from './UploadFileDto.js';
+export * from './DeleteFileDto.js';

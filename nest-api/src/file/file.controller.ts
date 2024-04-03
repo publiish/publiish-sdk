@@ -13,11 +13,11 @@ import {
   Res,
   HttpStatus,
 } from '@nestjs/common';
-import { AuthGuard } from './../auth/auth.guard';
-import { FileService } from './file.service';
-import { DeleteFileResponse, PostFileResponse } from './types';
-import { DeleteFileDto, UploadFileDto } from './dto';
-import { RequestWithUser } from 'src/auth/types';
+import { AuthGuard } from './../auth/auth.guard.js';
+import { FileService } from './file.service.js';
+import { DeleteFileResponse, PostFileResponse } from './types.js';
+import { DeleteFileDto, UploadFileDto } from './dto/index.js';
+import { RequestWithUser } from 'src/auth/types.js';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Response } from 'express';
 

@@ -1,4 +1,4 @@
-import { ErrorCode } from './codes';
+import { ErrorCode } from './codes.js';
 
 export const ERROR_MESSAGE = {
   [ErrorCode.USER_ALREADY_EXIST]: {
@@ -62,6 +62,10 @@ export const ERROR_MESSAGE = {
   [ErrorCode.FILE_NOT_DELETED]: {
     summary: 'File not deleted, something went wrong',
     code: ErrorCode.FILE_NOT_UPLOADED,
+  },
+  [ErrorCode.IPNS_NOT_PUBLISHED]: {
+    summary: 'IPNS not published, something went wrong',
+    code: ErrorCode.IPNS_NOT_PUBLISHED,
   },
   [ErrorCode.BRAND_ALREADY_EXISTS]: {
     summary: 'Brand already exists',

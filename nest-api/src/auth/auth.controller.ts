@@ -13,8 +13,8 @@ import {
   UseInterceptors,
   Headers,
 } from '@nestjs/common';
-import { SignInDto, SignUpDto, PermissionDto } from './dto';
-import { AuthService } from './auth.service';
+import { SignInDto, SignUpDto, PermissionDto } from './dto/index.js';
+import { AuthService } from './auth.service.js';
 import {
   SigninResponse,
   SignupResponse,

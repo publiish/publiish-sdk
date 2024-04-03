@@ -11,9 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ERROR_MESSAGE } from 'src/common/error/messages';
-import { isInvalidEndpoint } from './helpers/validateSubDomain';
-import { Brand } from 'src/brand/brand.entity';
+import { isInvalidEndpoint } from './helpers/validateSubDomain.js';
+import { Brand } from 'src/brand/brand.entity.js';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

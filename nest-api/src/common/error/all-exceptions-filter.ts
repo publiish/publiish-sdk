@@ -9,11 +9,11 @@ import {
 
 import { Response } from 'express';
 
-import { ApiError } from './api-error';
-import { ValidationException } from './validation-exception';
+import { ApiError } from './api-error.js';
+import { ValidationException } from './validation-exception.js';
 
-import { ApiErrorResponse } from './types';
-import { ERROR_MESSAGE } from './messages';
+import { ApiErrorResponse } from './types.js';
+import { ERROR_MESSAGE } from './messages.js';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {

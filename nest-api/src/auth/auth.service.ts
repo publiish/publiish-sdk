@@ -2,16 +2,16 @@ import * as bcrypt from 'bcrypt';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ERROR_MESSAGE } from 'src/common/error/messages';
-import { Brand } from 'src/brand/brand.entity';
+import { ERROR_MESSAGE } from '../common/error/messages.js';
+import { Brand } from '../brand/brand.entity.js';
 import {
   SigninResponse,
   SignupResponse,
   BrandResponse,
   PermissionResponse,
-} from './types';
+} from './types.js';
 import { JwtService } from '@nestjs/jwt';
-import { isInvalidEndpoint } from './helpers/validateSubDomain';
+import { isInvalidEndpoint } from './helpers/validateSubDomain.js';
 
 @Injectable()
 export class AuthService {
