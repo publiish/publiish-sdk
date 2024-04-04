@@ -8,25 +8,18 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { IPNSRecord } from "./types";
-
-export * from './ipns-do';
-
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
 	// MY_KV_NAMESPACE: KVNamespace;
 	//
 	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	IPNS_DURABLE_OBJECT: DurableObjectNamespace;
+	// MY_DURABLE_OBJECT: DurableObjectNamespace;
 	//
 	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
 	// MY_BUCKET: R2Bucket;
 	//
 	// Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
 	// MY_SERVICE: Fetcher;
-	NEST_API_URL: string;
-	IPNS_GATEWAY_URL: string;
-	IPFS_NODE_URL: string;
 }
 
 export default {
@@ -37,29 +30,39 @@ export default {
 	): Promise<Response> {
 		const url = new URL(request.url);
     	const pathComponents = url.pathname.split('/').filter(p => p);
-
-		if (pathComponents[0] === "ipns-publish") {
-			if (pathComponents.length < 3) {
-				return new Response("URL must be in the format /ipns-publish/ipns-name/file-cid", { status: 400 });
+		console.log('xxx', pathComponents[0]);
+		if (pathComponents[0] === "resolve") {
+			if (pathComponents.length < 2) {
+				return new Response("URL must be in the format /resolve/ipns-hash", { status: 400 });
 			}
-			const [, ipnsName, fileCid] = pathComponents; // Using array destructuring to skip the first item
+			const [, ipnsHash] = pathComponents; // Using array destructuring to skip the first item
 
-			const record: IPNSRecord = { ipnsName, fileCid };
-			const id = env.IPNS_DURABLE_OBJECT.idFromName(ipnsName)
-			const object = env.IPNS_DURABLE_OBJECT.get(id);
-
-			return object.fetch(request.url);
+			const ipfsnodeUrls: string[] = [
+				`http://20.222.105.67:5001/api/v0/name/resolve?arg=${ipnsHash}&recursive=true`,
+			];
 			
-		} else if (pathComponents[0] === "ipns-resolve") {
-			if (pathComponents.length !== 2) {
-				return new Response("URL must be in the format /ipns-resolve/ipns-name", { status: 400 });
-			}
-			const [, ipnsName] = pathComponents;
+			const fetchPromises = ipfsnodeUrls.map(url =>
+				fetch(url, {method: 'POST'}).then(response => {
+					if (response.ok) return response;
+					throw new Error('Not a valid response.');
+				})	
+			);
 
-			const id = env.IPNS_DURABLE_OBJECT.idFromName(ipnsName)
-			const object = env.IPNS_DURABLE_OBJECT.get(id);
-			return object.fetch(request.url);
-		}
+			try {
+				// Using Promise.any to get the first successful response
+				const firstSuccessfulResponse = await Promise.any(fetchPromises);
+				// Return the fastest response
+				return new Response(firstSuccessfulResponse.body, {
+					status: firstSuccessfulResponse.status,
+					statusText: firstSuccessfulResponse.statusText,
+					headers: firstSuccessfulResponse.headers
+				});
+
+			} catch (error) {
+				return new Response('Error fetching from IPFS gateways.', {status: 500});
+			}
+			
+		} 
 
 		return new Response("Endpoint not found", { status: 404 });
 	},

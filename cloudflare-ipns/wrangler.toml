@@ -1,9 +1,17 @@
 name = "cloudflare-ipns"
 main = "src/index.ts"
 compatibility_date = "2024-04-03"
+
+compatibility_flags = ["durable_object_alarms"]
+
 [durable_objects]
 bindings = [{ name = "IPNS_DURABLE_OBJECT", class_name = "IPNSRecordDO" }]
 
 [[migrations]]
 tag = "v1"
 new_classes = ["IPNSRecordDO"]
+
+[vars]
+NEST_API_URL = "http://20.222.105.67:3000/api"
+IPFS_NODE_URL = "http://20.222.105.67:5001/api/v0"
+IPNS_GATEWAY_URL = "http://localhost:8787"
