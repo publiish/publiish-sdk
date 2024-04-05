@@ -49,7 +49,9 @@ docker container exec cluster ipfs-cluster-ctl peers ls
 ```
 upload file via cluster:  
 __Request:__  
-```curl -X POST -F file=@green.jpeg -F file=@green1.jpeg "http://18.118.187.243:7000/api/add"```
+```
+curl -X POST -F file=@green.jpeg -F file=@green1.jpeg "http://18.118.187.243:7000/api/add"
+```
 
 __Response:__  
 ```{

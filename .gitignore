@@ -26,6 +26,9 @@ dist/
 # JetBrains IDE
 .idea/
 
+# Wrangler state
+.wrangler
+
 # Unit test reports
 TEST*.xml
 
