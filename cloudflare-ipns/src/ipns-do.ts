@@ -29,13 +29,10 @@ export class IPNSRecordDO implements DurableObject{
 
 			const record: IPNSRecord = { ipnsName, fileCid };
 
-      const nestapiUrl = `${this.env.NEST_API_URL}/ipns/publish/${ipnsName}/${fileCid}`;
-      
+      const nestapiUrl = `${this.env.NEST_API_URL}/ipns/publish/${ipnsName}/${fileCid}?brand_id=${brand_id}&auth_user_id=${auth_user_id}`;
+
       try{
-        const response = await fetch(nestapiUrl + new URLSearchParams({
-            brand_id, 
-            auth_user_id
-          }), 
+        const response = await fetch(nestapiUrl,
           {method:'POST'}
         );
 

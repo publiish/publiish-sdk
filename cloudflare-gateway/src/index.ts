@@ -20,6 +20,9 @@ export interface Env {
 	//
 	// Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
 	// MY_SERVICE: Fetcher;
+	NODE_URL1: string;
+	NODE_URL2: string;
+	NODE_URL3: string;
 }
 
 export default {
@@ -30,7 +33,7 @@ export default {
 	): Promise<Response> {
 		const url = new URL(request.url);
     	const pathComponents = url.pathname.split('/').filter(p => p);
-		console.log('xxx', pathComponents[0]);
+
 		if (pathComponents[0] === "resolve") {
 			if (pathComponents.length < 2) {
 				return new Response("URL must be in the format /resolve/ipns-hash", { status: 400 });
@@ -38,7 +41,9 @@ export default {
 			const [, ipnsHash] = pathComponents; // Using array destructuring to skip the first item
 
 			const ipfsnodeUrls: string[] = [
-				`http://20.222.105.67:5001/api/v0/name/resolve?arg=${ipnsHash}&recursive=true`,
+				`${env.NODE_URL1}/api/v0/name/resolve?arg=${ipnsHash}&recursive=true`,
+				`${env.NODE_URL2}/api/v0/name/resolve?arg=${ipnsHash}&recursive=true`,
+				`${env.NODE_URL3}/api/v0/name/resolve?arg=${ipnsHash}&recursive=true`,
 			];
 			
 			const fetchPromises = ipfsnodeUrls.map(url =>

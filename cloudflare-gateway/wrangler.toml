@@ -1,3 +1,8 @@
 name = "cloudflare-gateway"
 main = "src/index.ts"
 compatibility_date = "2024-04-04"
+
+[var]
+NODE_URL1="http://20.222.105.67:5001"
+NODE_URL2="http://20.222.105.67:5001"
+NODE_URL3="http://20.222.105.67:5001"
