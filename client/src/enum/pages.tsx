@@ -16,4 +16,9 @@ export const PAGES = [
     path: "/upload",
     icon: <AiOutlineCloudUpload />,
   },
+  {
+    name: "ApiKey",
+    path: "/apikeys",
+    icon: <AiOutlineCloudUpload />,
+  },
 ];
