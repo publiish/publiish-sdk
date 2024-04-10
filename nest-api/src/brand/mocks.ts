@@ -9,5 +9,6 @@ export const BRAND_MOCK: Brand = {
   delete_permission: true,
   email: 'brand@email.com',
   sub_domain: 'http://sub.brand.com',
+  apikeys: [],
   toJSON: () => [],
 };

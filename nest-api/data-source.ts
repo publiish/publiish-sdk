@@ -1,5 +1,6 @@
-require('dotenv').config();
+import dotenv from 'dotenv'
 import { DataSource } from 'typeorm';
+dotenv.config();
 
 const appDataSource = new DataSource({
   type: 'mysql',

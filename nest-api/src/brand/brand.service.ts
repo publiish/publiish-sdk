@@ -45,4 +45,34 @@ export class BrandService {
       },
     };
   }
+
+  async updateBrandProfile( args: {
+    id: number,
+    brandName?: string,
+    brandUrl?: string,
+    subDomain?: string,
+    daoId?: number
+  }) {
+    try {
+      await this.brandRepository.update(args.id, {
+        brand_name: args.brandName,
+        brand_url: args.brandUrl,
+        sub_domain: args.subDomain,
+        dao_id: args.daoId,
+      })
+      return {
+        success: 'Y',
+        status: 200,
+        Message: 'Profile changed succefully.',
+      };
+    } catch(error) {
+      console.error('error', error);
+      return {
+        success: 'N',
+        status: 200,
+        Message: `Something went wrong with update brand profile. error = ${error}`,
+      }; 
+    }
+    
+  }
 }
