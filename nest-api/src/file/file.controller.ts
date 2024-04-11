@@ -20,6 +20,7 @@ import { DeleteFileDto, UploadFileDto } from './dto/index.js';
 import { RequestWithUser } from 'src/auth/types.js';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Response } from 'express';
+import { ApikeyGuard } from 'src/apikey/apikey.guard.js';
 
 @Controller('files')
 export class FileController {
@@ -49,17 +50,16 @@ export class FileController {
   //   return this.fileService.postFile(file, brand_id, auth_user_id);
   // }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(ApikeyGuard)
   @Post('file_add_update')
   async postFile(
     @Req() req: RequestWithUser,
-    @Query() { brand_id, auth_user_id }: UploadFileDto,
+    @Query() { auth_user_id }: UploadFileDto,
   ) {
     const result = await this.fileService.postFile(
       req,
-      brand_id,
+      req.user.id,
       auth_user_id,
-      // req.user.id,
     );
 
     return result;
@@ -74,9 +74,8 @@ export class FileController {
     try {
       this.fileService.postChunkFile(
         req,
-        brand_id,
+        req.user.id,
         auth_user_id,
-        // req.user.id,
         res
       );
       // res.status(HttpStatus.NO_CONTENT).send();
@@ -86,7 +85,7 @@ export class FileController {
 
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(ApikeyGuard)
   @Delete('file_delete')
   deleteFile(
     @Query() { brand_id, auth_user_id, cid }: DeleteFileDto,

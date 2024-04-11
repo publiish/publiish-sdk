@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Post, Query, Req, Res } from "@nestjs/common";
+import { Controller, Get, Param, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
 import { IpnsService } from "./ipns.service.js";
 import { RequestWithUser } from "../auth/types.js";
 import { UploadFileDto } from "../file/dto/index.js";
 import { CreateKeyDto } from "./dto/index.js";
+import { ApikeyGuard } from "../apikey/apikey.guard.js";
 @Controller('ipns')
 export class IpnsController {
     constructor(private readonly ipnsService: IpnsService) {}
@@ -13,6 +14,7 @@ export class IpnsController {
     //     return 'Helia is running, PeerId ' + helia.libp2p.peerId.toString();
     // }
 
+    @Post('publish/:keyName/:cid')
     @Post('/keys')
     async createKey(
         @Req() req: RequestWithUser,
@@ -27,6 +29,7 @@ export class IpnsController {
         
     // }
 
+    @UseGuards(ApikeyGuard)
     @Post('publish/:keyName/:cid')
     async publishIpns(
         @Req() req: RequestWithUser,
