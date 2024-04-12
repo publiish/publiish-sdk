@@ -2,8 +2,11 @@
 
 import ChunkUploader from "@/lib/chunk-uploader";
 import { PUBLISH_API_URL } from "@/lib/config";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { useRef, useState } from "react";
-export default function DragAndDrop() {
+export default function DragAndDropChunkUpload() {
+  const { getItem } = useLocalStorage();
+  
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
   const [files, setFiles] = useState<any>([]);
@@ -37,8 +40,9 @@ export default function DragAndDrop() {
         setUploadProgress(0);
         setUploadTotalProgress(0);
 
+        const authToken = getItem('token');
         const endpoint = `${PUBLISH_API_URL}/api/files/file_chunk_add?brand_id=1&auth_user_id=1`;
-        const uploader = new ChunkUploader({endpoint, file: files[0], chunkSize: 20, uploadProgressCallback: handleUploadProgress})
+        const uploader = new ChunkUploader({endpoint, authToken: authToken!, file: files[0], chunkSize: 20, uploadProgressCallback: handleUploadProgress})
         
         setChunkUploader(uploader);
 

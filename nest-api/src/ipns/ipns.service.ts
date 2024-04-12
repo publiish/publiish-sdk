@@ -15,6 +15,10 @@ export class IpnsService {
     async createKey (args: {
         name: string
     }) : Promise<IpnsKeyResponse> {
+        if (!args.name) {
+            throw new Error("Invalid key name");
+        }
+        
         const ipnsKeyClass = new IpnsKey(process.env.IPFS_API_URL);
         const keyInfo = await ipnsKeyClass.gen({
             name: args.name,

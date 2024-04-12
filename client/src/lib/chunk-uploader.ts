@@ -2,6 +2,7 @@ import axios, { AxiosProgressEvent } from "axios";
 
 interface ChunkUploaderParams {
   endpoint: string;
+  authToken: string;
   file: File;
   headers?: Record<string, string>;
   postParams?: Record<string, any>;
@@ -13,6 +14,7 @@ interface ChunkUploaderParams {
 
 class ChunkUploader {
   private endpoint: string;
+  private authToken: string;
   private file: File;
   private headers: Record<string, string>;
   private postParams: Record<string, any>;
@@ -35,6 +37,7 @@ class ChunkUploader {
 
   constructor(params: ChunkUploaderParams) {
     this.endpoint = params.endpoint;
+    this.authToken = params.authToken;
     this.file = params.file;
     this.headers = params.headers || {};
     this.postParams = params.postParams || {};
@@ -51,6 +54,7 @@ class ChunkUploader {
     this.offline = false;
     this.paused = false;
 
+    this.headers.authorization = `Bearer ${this.authToken}`
     this.headers['uploader-file-id'] = this._uniqid().toString();
     this.headers['uploader-file-name'] = this.file.name;
     this.headers['uploader-chunks-total'] = this.totalChunks.toString();
@@ -129,7 +133,7 @@ class ChunkUploader {
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
         // console.log('progressEvent', progressEvent)
         if (progressEvent.bytes) {
-          const percentage = Math.round((progressEvent.loaded / progressEvent.total!) * 100)
+          const percentage = Math.round((progressEvent.loaded / progressEvent.total!) * 100);
           this.uploadProgressCallback?.(percentage);
         }
       },

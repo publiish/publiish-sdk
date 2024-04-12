@@ -20,6 +20,7 @@ import { DeleteFileDto, UploadFileDto } from './dto/index.js';
 import { RequestWithUser } from 'src/auth/types.js';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Response } from 'express';
+import { ApikeyGuard } from '../apikey/apikey.guard.js';
 
 @Controller('files')
 export class FileController {
@@ -49,34 +50,33 @@ export class FileController {
   //   return this.fileService.postFile(file, brand_id, auth_user_id);
   // }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(ApikeyGuard)
   @Post('file_add_update')
   async postFile(
     @Req() req: RequestWithUser,
-    @Query() { brand_id, auth_user_id }: UploadFileDto,
+    @Query() { auth_user_id }: UploadFileDto,
   ) {
     const result = await this.fileService.postFile(
       req,
-      brand_id,
+      req.user.id,
       auth_user_id,
-      // req.user.id,
     );
 
     return result;
   }
 
+  @UseGuards(AuthGuard)
   @Post('file_chunk_add')
   postChunkFile(
     @Req() req: RequestWithUser,
-    @Query() { brand_id, auth_user_id }: UploadFileDto,
+    @Query() { auth_user_id }: UploadFileDto,
     @Res() res: Response
   ) {
     try {
       this.fileService.postChunkFile(
         req,
-        brand_id,
+        req.user.id,
         auth_user_id,
-        // req.user.id,
         res
       );
       // res.status(HttpStatus.NO_CONTENT).send();
@@ -86,13 +86,13 @@ export class FileController {
 
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(ApikeyGuard)
   @Delete('file_delete')
   deleteFile(
-    @Query() { brand_id, auth_user_id, cid }: DeleteFileDto,
+    @Query() { auth_user_id, cid }: DeleteFileDto,
     @Request() { user }: RequestWithUser,
   ): Promise<DeleteFileResponse> {
-    return this.fileService.deleteFile(brand_id, auth_user_id, cid, user?.id);
+    return this.fileService.deleteFile(user.id, auth_user_id, cid);
   }
 
   // @Get('publish-link/:cid')

@@ -4,8 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  Relation,
 } from 'typeorm';
 import { Exclude, instanceToPlain } from 'class-transformer';
+import { Apikey } from '../apikey/apikey.entity.js';
 
 @Entity('brands')
 export class Brand {
@@ -21,7 +24,7 @@ export class Brand {
   @Column('int', { nullable: true })
   dao_id?: number;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100, nullable: true, unique: true })
   email?: string;
 
   @Exclude()
@@ -36,6 +39,9 @@ export class Brand {
 
   @Column({ default: true })
   delete_permission: boolean;
+
+  @OneToMany(() => Apikey, (apikey) => apikey.brand)
+  apikeys: Relation<Apikey>[];
 
   constructor(partial: Partial<Brand>) {
     Object.assign(this, partial);

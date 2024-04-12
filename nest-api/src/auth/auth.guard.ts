@@ -12,7 +12,7 @@ import { Request } from 'express';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isInvalidEndpoint } from './helpers/validateSubDomain.js';
-import { Brand } from 'src/brand/brand.entity.js';
+import { Brand } from '../brand/brand.entity.js';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

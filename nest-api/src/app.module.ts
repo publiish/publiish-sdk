@@ -12,6 +12,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { IpnsModule } from './ipns/ipns.module.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { ApikeyModule } from './apikey/apikey.module.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,6 +27,7 @@ const __dirname = dirname(__filename);
       signOptions: { expiresIn: '1H' },
     }),
     AuthModule,
+    ApikeyModule,
     FileModule,
     IpnsModule,
     BrandModule,
