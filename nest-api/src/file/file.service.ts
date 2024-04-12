@@ -287,7 +287,6 @@ export class FileService {
     brand_id: number,
     auth_user_id: number,
     cid: string,
-    loggedInUserId: number,
   ): Promise<DeleteFileResponse> {
     // if (Number(brand_id) !== loggedInUserId) {
     //   throw new HttpException(

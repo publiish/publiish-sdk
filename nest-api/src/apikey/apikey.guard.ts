@@ -25,8 +25,7 @@ import {
       const httpContext = context.switchToHttp();
       const request = httpContext.getRequest();
       
-      const apikey = this.extractApikeyFromBody(request);
-
+      const apikey = this.extractApikeyFromHeader(request);
       if (!apikey) {
         throw new UnauthorizedException();
       }
@@ -57,9 +56,9 @@ import {
       return true;
     }
   
-    private extractApikeyFromBody(request: Request): string | undefined {
-      const { ApiKey } = request.body;
-      return ApiKey;
+    private extractApikeyFromHeader(request: Request): string | undefined {
+      const { apikey } = request.headers;
+      return apikey.toString();
     }
   }
   

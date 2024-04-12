@@ -5,11 +5,6 @@ export class DeleteFileDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumberString()
-  brand_id: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumberString()
   auth_user_id: number;
 
   @ApiProperty()

@@ -20,7 +20,7 @@ import { DeleteFileDto, UploadFileDto } from './dto/index.js';
 import { RequestWithUser } from 'src/auth/types.js';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Response } from 'express';
-import { ApikeyGuard } from 'src/apikey/apikey.guard.js';
+import { ApikeyGuard } from '../apikey/apikey.guard.js';
 
 @Controller('files')
 export class FileController {
@@ -65,10 +65,11 @@ export class FileController {
     return result;
   }
 
+  @UseGuards(AuthGuard)
   @Post('file_chunk_add')
   postChunkFile(
     @Req() req: RequestWithUser,
-    @Query() { brand_id, auth_user_id }: UploadFileDto,
+    @Query() { auth_user_id }: UploadFileDto,
     @Res() res: Response
   ) {
     try {
@@ -88,10 +89,10 @@ export class FileController {
   @UseGuards(ApikeyGuard)
   @Delete('file_delete')
   deleteFile(
-    @Query() { brand_id, auth_user_id, cid }: DeleteFileDto,
+    @Query() { auth_user_id, cid }: DeleteFileDto,
     @Request() { user }: RequestWithUser,
   ): Promise<DeleteFileResponse> {
-    return this.fileService.deleteFile(brand_id, auth_user_id, cid, user?.id);
+    return this.fileService.deleteFile(user.id, auth_user_id, cid);
   }
 
   // @Get('publish-link/:cid')

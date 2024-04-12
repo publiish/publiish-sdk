@@ -12,6 +12,11 @@ export const PAGES = [
     icon: <AiOutlineUser />,
   },
   {
+    name: "Upload File (Chunk)",
+    path: "/upload-chunk",
+    icon: <AiOutlineCloudUpload />,
+  },
+  {
     name: "Upload File",
     path: "/upload",
     icon: <AiOutlineCloudUpload />,
