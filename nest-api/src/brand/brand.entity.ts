@@ -15,13 +15,13 @@ export class Brand {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text', {nullable: true, unique: true})
+  @Column({length: 512, nullable: true, unique: true})
   magic_link_id?: string;
   
-  @Column('text', {nullable: true, unique: true})
+  @Column({length: 512, nullable: true, unique: true})
   did?: string;
 
-  @Column('text', {nullable: true, unique: true})
+  @Column({length: 512, nullable: true, unique: true})
   public_address?: string;
 
   @Column({ length: 100, nullable: true })
