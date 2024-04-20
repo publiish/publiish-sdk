@@ -1,21 +1,21 @@
 import axios, { AxiosProgressEvent } from "axios";
 import { DeleteFileResponse, UploadFileResponse } from "../types/type";
+import { APITOKEN, UCANTOKEN } from "..";
 
 
 
 export class Files {
   private url: string;
-  private apikey: string;
 
-  constructor(url: string, apikey: string) {
+  constructor(url: string) {
     this.url = url;
-    this.apikey = apikey;
   }
 
   public async uploadFile( args: {
     content: any;
     auth_user_id: number;
-    uploadProgressCallback?: (percentage: number)=>void
+    uploadProgressCallback?: (percentage: number)=>void;
+    token: APITOKEN | UCANTOKEN; 
   }): Promise<UploadFileResponse> {
     try {
       const form = new FormData();
@@ -25,7 +25,8 @@ export class Files {
       const result = await axios.post(url, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'ApiKey': this.apikey,
+            Authorization: `Bearer ${args.token}`,
+            'ApiKey': args.token,
           }, 
           onUploadProgress: (progressEvent: AxiosProgressEvent) => {
             if (progressEvent.bytes) {
@@ -49,12 +50,14 @@ export class Files {
   public async deleteFile( args: {
     auth_user_id: number;
     cid: string;
+    token: APITOKEN | UCANTOKEN
   }) : Promise<DeleteFileResponse> {
     try {
       const url = `${this.url}/api/files/file_delete?auth_user_id=${args.auth_user_id}&cid=${args.cid}`;
       const result = await axios.delete(url, {
         headers: {
-          'ApiKey': this.apikey,
+          Authorization: `Bearer ${args.token}`,
+          'ApiKey': args.token,
         }, 
       });
       return result.data;

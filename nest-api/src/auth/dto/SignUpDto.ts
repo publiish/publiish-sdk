@@ -16,11 +16,5 @@ export class SignUpDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @IsStrongPassword()
-  password: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   brand_name: string;
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { parse } from 'ucan-storage/did';
 import { BrandService } from './brand.service.js';
-import { ProfileDto } from './dto/index.js';
+import { DIDDto, ProfileDto } from './dto/index.js';
 import { AuthGuard } from '../auth/auth.guard.js';
 import { RequestWithUser } from '../auth/types.js';
 
@@ -27,5 +28,15 @@ export class BrandController {
       daoId: dao_id ? Number(dao_id) : null,
       subDomain: sub_domain ?? null,
     })
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('did')
+  registerDID(
+    @Req() req: RequestWithUser,
+    @Body() body: DIDDto
+  ) {
+    parse(body.did);
+    return this.brandService.registerDID({id: req.user.id, did: body.did});
   }
 }

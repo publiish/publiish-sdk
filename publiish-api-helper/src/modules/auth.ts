@@ -9,13 +9,11 @@ export class Auth {
 
   public async signup( args: {
     email: string;
-    password: string;
     brand_name: string;
   }) {
     try {
       const data = {
         email: args.email,
-        password: args.password,
         brand_name: args.brand_name
       };
 
@@ -28,12 +26,10 @@ export class Auth {
 
   public async signin( args: {
     email: string;
-    password: string;
   }) {
     try {
       const data = {
         email: args.email,
-        password: args.password,
       };
 
       const url = `${this.url}/api/auth/signin`;
