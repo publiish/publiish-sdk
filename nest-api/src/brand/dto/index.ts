@@ -24,3 +24,10 @@ export class ProfileDto {
   @ApiProperty()
   sub_domain: string;
 }
+
+export class DIDDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  did: string;
+}

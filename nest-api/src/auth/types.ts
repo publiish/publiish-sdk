@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { Brand } from 'src/brand/brand.entity.js';
 import { CoreApiResponse } from 'src/interfaces/coreApiResponse.js';
+import { StorageSemantics, UcanPayload } from 'ucan-storage/types';
 
 export interface SignupResponse extends CoreApiResponse {
   brand: Brand;
@@ -18,4 +19,13 @@ export interface PermissionResponse extends CoreApiResponse {
 
 export interface RequestWithUser extends Request {
   user: Brand;
+  auth: {
+    type: 'ucan'|'key'
+    ucan?: {
+      token: string;
+      root: UcanPayload;
+      cap: StorageSemantics;
+    }
+    token?: string;
+  };
 }

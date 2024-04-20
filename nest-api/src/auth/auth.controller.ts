@@ -12,6 +12,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Headers,
+  Req,
 } from '@nestjs/common';
 import { SignInDto, SignUpDto, PermissionDto } from './dto/index.js';
 import { AuthService } from './auth.service.js';
@@ -21,26 +22,29 @@ import {
   BrandResponse,
   PermissionResponse,
 } from './types';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
+  
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  signup(@Body() body: SignUpDto): Promise<SignupResponse> {
-    const { email, password, brand_name } = body;
-
-    return this.authService.signup(email, password, brand_name);
+  signup(
+    @Req() req: Request,
+    @Body() body: SignUpDto
+  ): Promise<SignupResponse> {
+    req.headers
+    const { email, brand_name } = body;
+    return this.authService.signup(req, brand_name);
   }
 
   @Post('signin')
   signin(
-    @Body() body: SignInDto,
+    @Req() req: Request,
     @Headers('referer') referer?: string,
   ): Promise<SigninResponse> {
-    const { email, password } = body;
-
-    return this.authService.signin(email, password, referer);
+    return this.authService.signin(req);
   }
 
   @Post('change_permission')

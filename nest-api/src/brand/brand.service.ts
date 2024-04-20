@@ -73,6 +73,28 @@ export class BrandService {
         Message: `Something went wrong with update brand profile. error = ${error}`,
       }; 
     }
-    
+  }
+
+  async registerDID( args: {
+    id: number,
+    did: string
+  }) {
+    try {
+      await this.brandRepository.update(args.id, {
+        did: args.did
+      })
+      return {
+        success: 'Y',
+        status: 200,
+        Message: 'DID registered succefully.',
+      };
+    } catch(error) {
+      console.error('error', error);
+      return {
+        success: 'N',
+        status: 200,
+        Message: `Something went wrong with register DID. error = ${error}`,
+      }; 
+    }
   }
 }

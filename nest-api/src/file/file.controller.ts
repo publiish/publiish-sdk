@@ -50,7 +50,7 @@ export class FileController {
   //   return this.fileService.postFile(file, brand_id, auth_user_id);
   // }
 
-  @UseGuards(ApikeyGuard)
+  @UseGuards(AuthGuard({checkUcan: true}))
   @Post('file_add_update')
   async postFile(
     @Req() req: RequestWithUser,
@@ -65,7 +65,7 @@ export class FileController {
     return result;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard({checkUcan: true}))
   @Post('file_chunk_add')
   postChunkFile(
     @Req() req: RequestWithUser,
@@ -86,7 +86,7 @@ export class FileController {
 
   }
 
-  @UseGuards(ApikeyGuard)
+  @UseGuards(AuthGuard({checkUcan: true}))
   @Delete('file_delete')
   deleteFile(
     @Query() { auth_user_id, cid }: DeleteFileDto,

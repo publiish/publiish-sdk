@@ -31,7 +31,7 @@ export class ApikeyService {
       }
 
       const apiKeyString = await this.jwtService.signAsync({
-        brandId: args.brandId,
+        id: args.brandId,
         isDefault: args.isDefault ?? false,
         storageSize: args.storageSize ?? 0,
       }, { 

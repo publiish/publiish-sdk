@@ -12,22 +12,48 @@ import {
 } from './types.js';
 import { JwtService } from '@nestjs/jwt';
 import { isInvalidEndpoint } from './helpers/validateSubDomain.js';
+import { Magic } from '@magic-sdk/admin';
+import { Request } from 'express';
+import { parseMagic } from 'src/lib/magic-lib.js';
 
 @Injectable()
 export class AuthService {
+  private magic:Magic;
+  
   constructor(
     private jwtService: JwtService,
     @InjectRepository(Brand)
     private brandRepository: Repository<Brand>,
-  ) {}
+  ) {
+    this.magic = new Magic(process.env.MAGIC_SECRET_KEY);
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
+  }
 
   async signup(
-    email: string,
-    password: string,
+    req: Request,
     brand_name: string,
   ): Promise<SignupResponse> {
+
+    const auth = req.headers.authorization ?? "";
+    const token = this.magic.utils.parseAuthorizationHeader(auth);
+    this.magic.token.validate(token);
+    const metadata = await this.magic.users.getMetadataByToken(token);
+
+    if (!metadata.issuer) {
+      throw new HttpException(
+        "No user did token",
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    
+    const parsed = parseMagic(metadata);
+
     const existingBrand = await this.brandRepository.findOne({
-      where: [{ email }, { brand_name }],
+      where: [{ email: parsed.email }, { brand_name }],
     });
 
     if (existingBrand) {
@@ -37,13 +63,8 @@ export class AuthService {
       );
     }
 
-    const hash = await bcrypt.hash(
-      password,
-      Number(process.env.SALT_ROUNDS) || 10,
-    );
-
     const brand = await this.brandRepository.save(
-      new Brand({ email, password: hash, brand_name }),
+      new Brand({ email: parsed.email, password: "", brand_name, magic_link_id: parsed.issuer, public_address: parsed.publicAddress }),
     );
 
     delete brand.password;
@@ -66,32 +87,30 @@ export class AuthService {
   }
 
   async signin(
-    email: string,
-    password: string,
-    referer?: string,
+    req: Request,
   ): Promise<SigninResponse> {
-    const brand = await this.brandRepository.findOne({ where: { email } });
+    const auth = req.headers.authorization ?? "";
+    const token = this.magic.utils.parseAuthorizationHeader(auth);
+    this.magic.token.validate(token);
+    const metadata = await this.magic.users.getMetadataByToken(token);
+
+    if (!metadata.issuer) {
+      throw new HttpException(
+        "No user did token",
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    
+    const parsed = parseMagic(metadata);
+
+    const brand = await this.brandRepository.findOne({
+      where: [{ email: parsed.email }],
+    });
 
     if (!brand) {
       throw new HttpException(
         ERROR_MESSAGE.BRAND_DOES_NOT_EXIST,
         HttpStatus.NOT_FOUND,
-      );
-    }
-
-    if (isInvalidEndpoint(brand, referer)) {
-      throw new HttpException(
-        ERROR_MESSAGE.ACCESS_TOKEN_DENIED,
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    const isMatch = await bcrypt.compare(password, brand.password);
-
-    if (!isMatch) {
-      throw new HttpException(
-        ERROR_MESSAGE.INCORRECT_CREDENTIALS,
-        HttpStatus.BAD_REQUEST,
       );
     }
 
