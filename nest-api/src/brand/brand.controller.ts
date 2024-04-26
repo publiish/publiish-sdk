@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { parse } from 'ucan-storage/did';
+import { parse } from 'publiish-ucan/did';
 import { BrandService } from './brand.service.js';
 import { DIDDto, ProfileDto } from './dto/index.js';
 import { AuthGuard } from '../auth/auth.guard.js';

@@ -9572,6 +9572,14 @@
   "resolved" "https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-1.1.0.tgz"
   "version" "1.1.0"
 
+"publiish-ucan@github:piscesyuma/publiish.ucan":
+  "resolved" "git+ssh://git@github.com/piscesyuma/publiish.ucan.git#a61f85de8830f2c4727f73bc16898fd2ed57625a"
+  "version" "1.0.0"
+  dependencies:
+    "@noble/ed25519" "^1.5.2"
+    "base-x" "^4.0.0"
+    "sade" "^1.8.1"
+
 "pump@^3.0.0":
   "integrity" "sha512-LwZy+p3SFs1Pytd/jYct4wpv49HiYCqd9Rlc5ZVdk0V+8Yzv6jR5Blk3TRmPL1ft69TxP0IMZGJ+WPFU2BFhww=="
   "resolved" "https://registry.npmjs.org/pump/-/pump-3.0.0.tgz"
@@ -10976,15 +10984,6 @@
   "integrity" "sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz"
   "version" "4.9.5"
-
-"ucan-storage@^1.3.0":
-  "integrity" "sha512-C1PvShqWTg6JzcBAuWDeCsaL6AggwsGWqbvKZ8XdN9csAukQVnA5/kerddhdPrpeoCGnJFfSkvBcPklZzdJ+OQ=="
-  "resolved" "https://registry.npmjs.org/ucan-storage/-/ucan-storage-1.3.0.tgz"
-  "version" "1.3.0"
-  dependencies:
-    "@noble/ed25519" "^1.5.2"
-    "base-x" "^4.0.0"
-    "sade" "^1.8.1"
 
 "uid@2.0.1":
   "integrity" "sha512-PF+1AnZgycpAIEmNtjxGBVmKbZAQguaa4pBUq6KNaGEcpzZ2klCNZLM34tsjp76maN00TttiiUf6zkIBpJQm2A=="

@@ -2,7 +2,7 @@ import { HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Brand } from "../brand/brand.entity.js";
 import { Repository } from "typeorm";
-import { Service } from 'ucan-storage/service'
+import { Service } from 'publiish-ucan/service'
 @Injectable()
 export class UcanService {
   private serviceUcan:Service;
