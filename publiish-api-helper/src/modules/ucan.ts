@@ -1,6 +1,6 @@
 import axios from "axios";
-import { KeyPair } from 'ucan-storage/keypair';
-import { build } from 'ucan-storage/ucan-storage';
+import { KeyPair } from 'publiish-ucan/keypair';
+import { build } from 'publiish-ucan/ucan-storage';
 import { APITOKEN } from "..";
 
 export class Ucan {

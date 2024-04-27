@@ -1,5 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
-import { Service } from "ucan-storage/service";
+import { Service } from "publiish-ucan/service";
 
 @Controller('did')
 export class DidController {

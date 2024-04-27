@@ -12,8 +12,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as Ucan from 'ucan-storage/ucan-storage'
-import { Service as UcanService } from 'ucan-storage/service'
+import * as Ucan from 'publiish-ucan/ucan-storage'
+import { Service as UcanService } from 'publiish-ucan/service'
 
 import { isInvalidEndpoint } from './helpers/validateSubDomain.js';
 import { Brand } from '../brand/brand.entity.js';
