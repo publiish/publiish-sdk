@@ -21,7 +21,7 @@ import {
   SignupResponse,
   BrandResponse,
   PermissionResponse,
-} from './types';
+} from './types.js';
 import { Request } from 'express';
 
 @Controller('auth')

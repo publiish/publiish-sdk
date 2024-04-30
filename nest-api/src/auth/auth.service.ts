@@ -14,7 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { isInvalidEndpoint } from './helpers/validateSubDomain.js';
 import { Magic } from '@magic-sdk/admin';
 import { Request } from 'express';
-import { parseMagic } from 'src/lib/magic-lib.js';
+import { parseMagic } from '../lib/magic-lib.js';
 
 @Injectable()
 export class AuthService {

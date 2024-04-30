@@ -9573,7 +9573,7 @@
   "version" "1.1.0"
 
 "publiish-ucan@github:piscesyuma/publiish.ucan":
-  "resolved" "git+ssh://git@github.com/piscesyuma/publiish.ucan.git#a61f85de8830f2c4727f73bc16898fd2ed57625a"
+  "resolved" "git+ssh://git@github.com/piscesyuma/publiish.ucan.git#548bd5dabfcc4b6eab0f88079ea48e9e3b9f8186"
   "version" "1.0.0"
   dependencies:
     "@noble/ed25519" "^1.5.2"

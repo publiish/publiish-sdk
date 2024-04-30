@@ -1,4 +1,4 @@
-import { CoreApiResponse } from 'src/interfaces/coreApiResponse';
+import { CoreApiResponse } from '../interfaces/coreApiResponse.js';
 
 export interface PostFileResponse extends CoreApiResponse {
   message?: string;

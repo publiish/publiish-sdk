@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
-import { BRAND_MOCK } from 'src/brand/mocks';
-import { SigninResponse, SignupResponse } from './types';
+import { BRAND_MOCK } from 'src/brand/mocks.js';
+import { SigninResponse, SignupResponse } from './types.js';
 
 export const SIGNUP_RESPONSE_MOCK: SignupResponse = {
   status: 200,

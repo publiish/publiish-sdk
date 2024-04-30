@@ -1,4 +1,4 @@
-import { Brand } from './brand.entity';
+import { Brand } from './brand.entity.js';
 
 export const BRAND_MOCK: Brand = {
   id: 1,

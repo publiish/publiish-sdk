@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { Brand } from 'src/brand/brand.entity.js';
-import { CoreApiResponse } from 'src/interfaces/coreApiResponse.js';
+import { Brand } from '../brand/brand.entity.js';
+import { CoreApiResponse } from '../interfaces/coreApiResponse.js';
 import { StorageSemantics, UcanPayload } from 'publiish-ucan/types';
 
 export interface SignupResponse extends CoreApiResponse {
